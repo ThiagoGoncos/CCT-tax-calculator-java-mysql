@@ -4,10 +4,6 @@
  */
 package taxcalculatorapp;
 
-/**
- *
- * @author thiagogoncos
- */
 import static taxcalculatorapp.DatabaseSetup.DB_URL;
 import static taxcalculatorapp.DatabaseSetup.PASSWORD;
 import static taxcalculatorapp.DatabaseSetup.TABLE_NAME;
@@ -18,6 +14,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+/**
+ *
+ * @author thiagogoncos
+ */
+
 
 // Definition of a class responsible for writing user data and taxes to the database
 public class DatabaseWriter extends Database {

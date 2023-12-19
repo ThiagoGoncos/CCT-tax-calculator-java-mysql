@@ -4,14 +4,15 @@
  */
 package taxcalculatorapp;
 
-/**
- *
- * @author thiagogoncos
- */
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+/**
+ *
+ * @author thiagogoncos
+ */
 
 // Definition of a class responsible for setting up the database schema and tables
 public class DatabaseSetup {
