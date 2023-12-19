@@ -2,14 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
-package taxcalculatorapp;
-
 import java.util.InputMismatchException;
 import java.util.Scanner;
-/**
- *
- * @author kelvindumas
- */
+
 public class TaxCalculatorApp {
 
     public static void main(String[] args) {
@@ -42,7 +37,7 @@ public class TaxCalculatorApp {
                         UserType userType = authenticatedUser.getUserType();
                         if (userType == UserType.ADMIN) {
                             Admin admin = (Admin) authenticatedUser;
-                            admin.handleAdminActions();  // Chama o método handleAdminActions para o Admin
+                            admin.handleAdminActions();
                         } else {
                             RegularUser regularUser = (RegularUser) authenticatedUser;
                             handleRegularUserActions(regularUser);
@@ -72,10 +67,6 @@ public class TaxCalculatorApp {
         }
     } while (initialChoice != 3);
 }
-
-    private static void handleAdminActions(Admin admin) {
-        admin.handleAdminActions();
-    }
 
     private static String taxCalculationToString(TaxCalculation taxCalculation) {
         return "Gross Income: " + taxCalculation.getGrossIncome()
