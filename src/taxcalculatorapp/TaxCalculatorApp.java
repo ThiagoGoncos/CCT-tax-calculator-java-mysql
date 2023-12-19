@@ -8,224 +8,226 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 /**
  *
- * @author thiagogoncos
+ * @author kelvindumas
  */
-public class TaxCalculatorApp {
-    public static void main(String[] args) {
-        showMainMenu();
-    }
+ppublic class TaxCalculatorApp {
 
-    private static void showMainMenu() {
-    Scanner scanner = new Scanner(System.in);
-    int initialChoice = -1;
+	public static void main(String[] args) {
+    	DatabaseSetup.setupDatabase();
+    	showMainMenu();
+	}
 
-    do {
-        try {
-            System.out.println("1. Login");
-            System.out.println("2. Register");
-            System.out.println("3. Exit");
-            System.out.println();
-            System.out.print("Enter your choice: ");
-            initialChoice = scanner.nextInt();
+	private static void showMainMenu() {
+    	Scanner scanner = new Scanner(System.in);
+    	int initialChoice = -1;
 
-            if (initialChoice < 1 || initialChoice > 3) {
-                System.out.println("Invalid input. Please enter a number between 1 and 3.");
-                continue;
-            }
+    	do {
+        	try {
+            	System.out.println("1. Login");
+            	System.out.println("2. Register");
+            	System.out.println("3. Exit");
+            	System.out.println();
+            	System.out.print("Enter your choice: ");
+            	initialChoice = scanner.nextInt();
 
-            switch (initialChoice) {
-            case 1:
-                User authenticatedUser = UserLogin.loginUser();
-                if (authenticatedUser != null) {
-                    UserType userType = authenticatedUser.getUserType();
-                    if (userType == UserType.ADMIN) {
-                        Admin admin = (Admin) authenticatedUser;
-                        handleAdminActions(admin);
-                    } else {
-                        RegularUser regularUser = (RegularUser) authenticatedUser;
-                        handleRegularUserActions(regularUser);
-                    }
-                } else {
-                    System.out.println("Authentication failed. Exiting application.");
-                    System.out.println();
-                }
-                break;
-                case 2:
-                    RegularUser newUser = UserRegistration.registerUser();
-                    if (newUser != null) {
-                        handleRegularUserActions(newUser);
-                    }
-                    break;
-                case 3:
-                    System.out.println("Exiting application.");
-                    System.out.println();
-                    break;
-                default:
-                    System.out.println("Invalid choice. Please try again.");
-            }
-            System.out.println();
-       } catch (InputMismatchException e) {
-            System.out.println("Invalid input. Please, enter a valid number.");
-            System.out.println();
-            scanner.next();
-            continue; 
-        }
-    } while (initialChoice != 3);
-}
+            	if (initialChoice < 1 || initialChoice > 3) {
+                	System.out.println("Invalid input. Please enter a number between 1 and 3.");
+                	continue;
+            	}
 
-    private static void handleAdminActions(Admin admin) {
-    Scanner scanner = new Scanner(System.in);
-    int choice;
+            	switch (initialChoice) {
+                	case 1:
+                    	User authenticatedUser = UserLogin.loginUser();
+                    	if (authenticatedUser != null) {
+                        	UserType userType = authenticatedUser.getUserType();
+                        	if (userType == UserType.ADMIN) {
+                            	Admin admin = (Admin) authenticatedUser;
+                            	handleAdminActions(admin);
+                        	} else {
+                            	RegularUser regularUser = (RegularUser) authenticatedUser;
+                            	handleRegularUserActions(regularUser);
+                        	}
+                    	} else {
+                        	System.out.println("Authentication failed. Exiting application.");
+                        	System.out.println();
+                    	}
+                    	break;
+                	case 2:
+                    	RegularUser newUser = UserRegistration.registerUser();
+                    	if (newUser != null) {
+                        	handleRegularUserActions(newUser);
+                    	}
+                    	break;
+                	case 3:
+                    	System.out.println("Exiting application.");
+                    	System.out.println();
+                    	break;
+                	default:
+                    	System.out.println("Invalid choice. Please try again.");
+            	}
+            	System.out.println();
+        	} catch (InputMismatchException e) {
+            	System.out.println("Invalid input. Please, enter a valid number.");
+            	System.out.println();
+            	scanner.next();
+        	}
+    	} while (initialChoice != 3);
+	}
 
-    do {
-        System.out.println();
-        System.out.println("Admin actions:");
-        for (UserAction action : UserAction.values()) {
-            System.out.println(action.ordinal() + 1 + ". " + action.getDescription());
-        }
-        
-        System.out.println();
+	private static void handleAdminActions(Admin admin) {
+    	Scanner scanner = new Scanner(System.in);
+    	int choice;
 
-        System.out.println("Admin Information:");
-        System.out.println(admin.toString());
-        
-        System.out.println();
+    	do {
+        	System.out.println();
+        	System.out.println("Admin actions:");
+        	for (UserAction action : UserAction.values()) {
+            	System.out.println(action.ordinal() + 1 + ". " + action.getDescription());
+        	}
 
-        System.out.print("Enter your choice: ");
-        choice = scanner.nextInt();
+        	System.out.println();
 
-        if (choice > 0 && choice <= UserAction.values().length) {
-            UserAction selectedAction = UserAction.values()[choice - 1];
-            switch (selectedAction) {
-                case MODIFY_PROFILE:
-                    System.out.print("Enter new username: ");
-                    String newUsername = scanner.next();
-                    System.out.print("Enter new password: ");
-                    String newPassword = scanner.next();
-                    System.out.print("Enter new name: ");
-                    String newName = scanner.next();
-                    System.out.print("Enter new surname: ");
-                    String newSurname = scanner.next();
+        	System.out.println("Admin Information:");
+        	System.out.println(admin.toString());
 
-                    admin.modifyProfile(newName, newSurname);
-                    admin.setUsername(newUsername);
-                    admin.setPassword(newPassword);
+        	System.out.println();
 
-                    Database.storeUser(admin);
-                    break;
-                case ACCESS_USERS_LIST:
-                    Database.displayAllUsers();
-                    break;
-                case REMOVE_USER:
-                    System.out.print("Enter username to remove: ");
-                    String usernameToRemove = scanner.next();
-                    Database.removeUser(usernameToRemove);
-                    break;
-                case REVIEW_OPERATIONS:
-                    reviewOperations(admin);
-                    break;
-                case EXIT:
-                    System.out.println("Exiting admin actions.");
-                    System.out.println();
-                    break;
-                default:
-                    System.out.println("Invalid choice. Please try again.");         
-            }
-            System.out.println();
-        } else {
-            System.out.println("Invalid choice. Please try again.");
-            
-        }
-    } while (choice != UserAction.EXIT.ordinal() + 1);
-}
-    
-private static void reviewOperations(Admin admin) {
-        for (User user : Database.getAllUsers()) {
-            if (user instanceof RegularUser) {
-                RegularUser regularUser = (RegularUser) user;
-                System.out.println("Tax calculations for user " + regularUser.getUsername() + ":");
+        	System.out.print("Enter your choice: ");
+        	choice = scanner.nextInt();
 
-                for (TaxCalculation taxCalculation : regularUser.getTaxCalculations()) {
-                    System.out.println(taxCalculationToString(taxCalculation));
-                }
-            }
-        }
-    }
+        	if (choice > 0 && choice <= UserAction.values().length) {
+            	UserAction selectedAction = UserAction.values()[choice - 1];
+            	switch (selectedAction) {
+                	case MODIFY_PROFILE:
+                    	System.out.print("Enter new username: ");
+                    	String newUsername = scanner.next();
+                    	System.out.print("Enter new password: ");
+                    	String newPassword = scanner.next();
+                    	System.out.print("Enter new name: ");
+                    	String newName = scanner.next();
+                    	System.out.print("Enter new surname: ");
+                    	String newSurname = scanner.next();
 
-    private static String taxCalculationToString(TaxCalculation taxCalculation) {
-        // Criar uma representação de string para os cálculos de impostos
-        return "Gross Income: " + taxCalculation.getGrossIncome() +
-               ", Tax Credits: " + taxCalculation.getTaxCredits() +
-               ", Income Tax: " + taxCalculation.getIncomeTax() +
-               ", USC: " + taxCalculation.getUsc() +
-               ", PRSI: " + taxCalculation.getPrsi();
-    }
- 
+                    	admin.modifyProfile(newName, newSurname);
+                    	admin.setUsername(newUsername);
+                    	admin.setPassword(newPassword);
 
-    private static void handleRegularUserActions(RegularUser regularUser) {
-    Scanner scanner = new Scanner(System.in);
-    int choice;
+                    	Database.storeUser(admin);
+                    	break;
+                	case ACCESS_USERS_LIST:
+                    	Database.displayAllUsers();
+                    	break;
+                	case REMOVE_USER:
+                    	System.out.print("Enter username to remove: ");
+                    	String usernameToRemove = scanner.next();
+                    	Database.removeUser(usernameToRemove);
+                    	break;
+                	case REVIEW_OPERATIONS:
+                    	reviewOperations(admin);
+                    	break;
+                	case EXIT:
+                    	System.out.println("Exiting admin actions.");
+                    	System.out.println();
+                    	break;
+                	default:
+                    	System.out.println("Invalid choice. Please try again.");
+            	}
+            	System.out.println();
+        	} else {
+            	System.out.println("Invalid choice. Please try again.");
+        	}
+    	} while (choice != UserAction.EXIT.ordinal() + 1);
+	}
 
-    do {
-        System.out.println();
-        System.out.println("Regular user actions:");
-        System.out.println("1. Modify profile");
-        System.out.println("2. Calculate and Save taxes");
-        System.out.println("3. Exit");
+	private static void reviewOperations(Admin admin) {
+    	for (User user : Database.getAllUsers()) {
+        	if (user instanceof RegularUser) {
+            	RegularUser regularUser = (RegularUser) user;
+            	System.out.println("Tax calculations for user " + regularUser.getUsername() + ":");
 
-        System.out.println();
-        System.out.println("User Information:");
-        System.out.println(regularUser.toString());
+            	for (TaxCalculation taxCalculation : regularUser.getTaxCalculations()) {
+                	System.out.println(taxCalculationToString(taxCalculation));
+            	}
+        	}
+    	}
+	}
 
-        System.out.println();
-        System.out.print("Enter your choice: ");
-        choice = scanner.nextInt();
+	private static String taxCalculationToString(TaxCalculation taxCalculation) {
+    	return "Gross Income: " + taxCalculation.getGrossIncome()
+            	+ ", Tax Credits: " + taxCalculation.getTaxCredits()
+            	+ ", Income Tax: " + taxCalculation.getIncomeTax()
+            	+ ", USC: " + taxCalculation.getUsc()
+            	+ ", PRSI: " + taxCalculation.getPrsi();
+	}
 
-        switch (choice) {
-            case 1:
-                modifyUserProfile(regularUser);
-                break;
-            case 2:
-                // Obtendo valores de grossIncome e taxCredits
-                System.out.print("Enter gross income: ");
-                double grossIncome = scanner.nextDouble();
-                System.out.print("Enter tax credits: ");
-                double taxCredits = scanner.nextDouble();
-                
-                calculateAndSaveTaxes(regularUser, grossIncome, taxCredits);
-                break;
-            case 3:
-                System.out.println("Exiting regular user actions.");
-                System.out.println();
-                break;
-            default:
-                System.out.println("Invalid choice. Please try again.");
-                System.out.println();
-        }
-    } while (choice != 3);
-}
+	private static void handleRegularUserActions(RegularUser regularUser) {
+    	Scanner scanner = new Scanner(System.in);
+    	int choice;
 
-    private static void modifyUserProfile(RegularUser regularUser) {
-        Scanner scanner = new Scanner(System.in);
+    	do {
+        	System.out.println();
+        	System.out.println("Regular user actions:");
+        	System.out.println("1. Modify profile");
+        	System.out.println("2. Calculate and Save taxes");
+        	System.out.println("3. Exit");
 
-        System.out.print("Enter new username: ");
-        String newUsername = scanner.next();
-        System.out.print("Enter new password: ");
-        String newPassword = scanner.next();
-        System.out.print("Enter new name: ");
-        String newName = scanner.next();
-        System.out.print("Enter new surname: ");
-        String newSurname = scanner.next();
+        	System.out.println();
+        	System.out.println("User Information:");
+        	System.out.println(regularUser.toString());
 
-        regularUser.modifyProfile(newName, newSurname);
-        regularUser.setUsername(newUsername);
-        regularUser.setPassword(newPassword);
+        	System.out.println();
+        	System.out.print("Enter your choice: ");
+        	choice = scanner.nextInt();
 
-        Database.storeUser(regularUser);
-        System.out.println("User profile modified: " + regularUser.toString());
-    }
+        	switch (choice) {
+            	case 1:
+                	modifyUserProfile(regularUser);
+                	break;
+            	case 2:
+                	System.out.print("Enter gross income: ");
+                	double grossIncome = scanner.nextDouble();
+                	System.out.print("Enter tax credits: ");
+                	double taxCredits = scanner.nextDouble();
 
-    private static void calculateAndSaveTaxes(RegularUser regularUser, double grossIncome, double taxCredits) {
-    regularUser.calculateAndSaveTaxes(grossIncome, taxCredits);
-}
+                	calculateAndSaveTaxes(regularUser, grossIncome, taxCredits);
+                	break;
+            	case 3:
+                	System.out.println("Exiting regular user actions.");
+                	System.out.println();
+                	break;
+            	default:
+                	System.out.println("Invalid choice. Please try again.");
+                	System.out.println();
+        	}
+    	} while (choice != 3);
+	}
+
+	private static void modifyUserProfile(RegularUser regularUser) {
+    	Scanner scanner = new Scanner(System.in);
+
+    	System.out.print("Enter new username: ");
+    	String newUsername = scanner.next();
+    	System.out.print("Enter new password: ");
+    	String newPassword = scanner.next();
+    	System.out.print("Enter new name: ");
+    	String newName = scanner.next();
+    	System.out.print("Enter new surname: ");
+    	String newSurname = scanner.next();
+
+    	regularUser.modifyProfile(newName, newSurname);
+    	regularUser.setUsername(newUsername);
+    	regularUser.setPassword(newPassword);
+
+    	Database.storeUser(regularUser);
+	}
+
+	private static void calculateAndSaveTaxes(RegularUser regularUser, double grossIncome, double taxCredits) {
+    	TaxCalculation taxCalculation = regularUser.calculateTaxes(grossIncome, taxCredits);
+
+    	System.out.println("Tax calculation for user " + regularUser.getUsername() + ":");
+    	System.out.println(taxCalculationToString(taxCalculation));
+
+    	DatabaseWriter.saveUserDataAndTaxes(regularUser, grossIncome, taxCredits,
+            	taxCalculation.getIncomeTax(), taxCalculation.getUsc(), taxCalculation.getPrsi());
+	}
 }
