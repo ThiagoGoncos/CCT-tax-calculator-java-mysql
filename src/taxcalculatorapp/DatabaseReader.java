@@ -6,6 +6,11 @@ package taxcalculatorapp;
 
 import java.util.List;
 
+/**
+ *
+ * @author thiagogoncos
+ */
+
 // Definition of a DatabaseReader class, extending the abstract Database class
 public class DatabaseReader extends Database {
 

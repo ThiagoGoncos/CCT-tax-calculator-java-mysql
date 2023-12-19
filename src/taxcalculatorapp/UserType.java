@@ -8,6 +8,7 @@ package taxcalculatorapp;
  *
  * @author thiagogoncos
  */
+
 // Enumeration representing different types of users in the system
 enum UserType {
     ADMIN,           // Represents an administrator user with special privileges

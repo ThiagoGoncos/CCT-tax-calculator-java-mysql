@@ -1,6 +1,6 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package taxcalculatorapp;
 
@@ -8,7 +8,7 @@ package taxcalculatorapp;
  *
  * @author thiagogoncos
  */
-// Definition of an interface named TaxCalculator
+
 interface TaxCalculator {
 
     // Method to calculate income tax based on gross income and tax credits

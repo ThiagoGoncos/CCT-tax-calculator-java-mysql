@@ -8,8 +8,7 @@ package taxcalculatorapp;
  *
  * @author thiagogoncos
  */
-// Classe TaxCalculation
-// Definition of a class representing a TaxCalculation
+
 public class TaxCalculation {
 
     // Fields to store various tax-related values

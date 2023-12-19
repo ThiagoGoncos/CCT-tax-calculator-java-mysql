@@ -8,6 +8,11 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ *
+ * @author thiagogoncos
+ */
+
 // Definition of an abstract Database class serving as a centralized storage for user-related operations
 public abstract class Database {
 
