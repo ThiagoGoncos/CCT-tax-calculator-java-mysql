@@ -47,9 +47,7 @@ public class DatabaseSetup {
 
     public static void createTable() {
         try (
-            Connection conn = DriverManager.getConnection(DB_URL, USER, PASSWORD);
-            Statement stmt = conn.createStatement();
-        ) {
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASSWORD)) {
             String createTableSQL = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " ("
                 + "id INT AUTO_INCREMENT PRIMARY KEY,"
                 + "username VARCHAR(50) NOT NULL,"
@@ -72,15 +70,14 @@ public class DatabaseSetup {
 
             System.out.println("Table '" + TABLE_NAME + "' created successfully.");
         } catch (SQLException e) {
-            e.printStackTrace();  // Trate a exceção de forma adequada
+            
         }
     }
 
     private static void executeUpdate(Connection conn, String sql) {
         try (Statement stmt = conn.createStatement()) {
             stmt.executeUpdate(sql);
-        } catch (SQLException e) {
-            e.printStackTrace();  // Trate a exceção de forma adequada
+        } catch (SQLException e) {          
         }
     }
 }
