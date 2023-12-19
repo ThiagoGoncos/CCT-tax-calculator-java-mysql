@@ -4,71 +4,76 @@
 */
 package taxcalculatorapp;
 
+
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
+import java.sql.SQLException
+
+
 
 public class RegularUser extends User {
-    private String jobRole;
-    private List<TaxCalculation> taxCalculations = new ArrayList<>();
 
-    public RegularUser(String username, String password, String name, String surname, String jobRole) {
-        super(username, password, name, surname, UserType.REGULAR_USER);
-        this.jobRole = jobRole;
-    }
+	private String jobRole;
+	private List<TaxCalculation> taxCalculations = new ArrayList<>();
 
-    public String getJobRole() {
-        return jobRole;
-    }
+	public RegularUser(String username, String password, String name, String surname, String jobRole) {
+    	super(username, password, name, surname, UserType.REGULAR_USER);
+    	this.jobRole = jobRole;
+	}
 
-    public void setJobRole(String jobRole) {
-        this.jobRole = jobRole;
-    }
+	public String getJobRole() {
+    	return jobRole;
+	}
 
-    @Override
-    public void modifyProfile(String name, String surname) {
-        super.setName(name);
-        super.setSurname(surname);
-        System.out.println("Regular user profile modified: " + this);
-    }
+	public void setJobRole(String jobRole) {
+    	this.jobRole = jobRole;
+	}
 
-    public void calculateAndSaveTaxes(double grossIncome, double taxCredits) {
-    TaxCalculator taxCalculator = new TaxCalculatorImpl();
+	@Override
+	public void modifyProfile(String name, String surname) {
+    	super.setName(name);
+    	super.setSurname(surname);
+    	System.out.println("RegularUser profile modified: " + this);
+	}
 
-    // Verificar se as taxas são números
-    if (!isValidNumber(grossIncome) || !isValidNumber(taxCredits)) {
-        System.out.println("Invalid input. Please enter valid numbers.");
-        return;
-    }
+	public TaxCalculation calculateTaxes(double grossIncome, double taxCredits) {
+    	TaxCalculator taxCalculator = new TaxCalculatorImpl();
 
-    double incomeTax = taxCalculator.calculateIncomeTax(grossIncome, taxCredits);
-    double usc = taxCalculator.calculateUSC(grossIncome);
-    double prsi = taxCalculator.calculatePRSI(grossIncome);
+    	// Seu código para calcular os impostos
+    	double incomeTax = taxCalculator.calculateIncomeTax(grossIncome, taxCredits);
+    	double usc = taxCalculator.calculateUSC(grossIncome);
+    	double prsi = taxCalculator.calculatePRSI(grossIncome);
 
-    System.out.println("Income Tax (PAYE): " + incomeTax);
-    System.out.println("USC: " + usc);
-    System.out.println("PRSI: " + prsi);
+    	// Criar e retornar uma instância de TaxCalculation
+    	TaxCalculation taxCalculation = new TaxCalculation(grossIncome, taxCredits, incomeTax, usc, prsi);
+    	return taxCalculation;
+	}
 
-    saveTaxCalculations(grossIncome, taxCredits, incomeTax, usc, prsi);
+	public void saveTaxCalculations(double grossIncome, double taxCredits, double incomeTax, double usc, double prsi) {
+    	TaxCalculator taxCalculator = new TaxCalculatorImpl();
 
-    System.out.println("Tax calculations saved successfully!");
-}
+    	double totalTax = taxCalculator.calculateTotalTax(grossIncome, taxCredits);
+   	 
+    	TaxCalculation taxCalculation = new TaxCalculation(grossIncome, taxCredits, incomeTax, usc, prsi);
+    	taxCalculations.add(taxCalculation);
 
-    private static boolean isValidNumber(double number) {
-        return !Double.isNaN(number) && !Double.isInfinite(number);
-    }
+    	// Salvando na tabela TaxTable
+    	DatabaseWriter.saveTaxCalculations(this.getUsername(), grossIncome, taxCredits, incomeTax, usc, prsi);
+    	System.out.println("Tax calculations saved successfully!");
+	}
 
-    private void saveTaxCalculations(double grossIncome, double taxCredits, double incomeTax, double usc, double prsi) {
-        TaxCalculation taxCalculation = new TaxCalculation(grossIncome, taxCredits, incomeTax, usc, prsi);
-        Database.saveTaxCalculations(this, taxCalculation);
-    }
+	public List<TaxCalculation> getTaxCalculations() {
+    	return taxCalculations;
+	}
 
-    public List<TaxCalculation> getTaxCalculations() {
-        return taxCalculations;
-    }
+	public void saveTaxCalculation(TaxCalculation taxCalculation) {
+    	taxCalculations.add(taxCalculation);
+	}
 
-    public void saveTaxCalculation(TaxCalculation taxCalculation) {
-        taxCalculations.add(taxCalculation);
-    }
+	public void saveUserToDatabase() {
+    	DatabaseWriter writer = new DatabaseWriter();
+    	writer.addUser(this);
+	}
 }
