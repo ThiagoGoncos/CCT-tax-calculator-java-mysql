@@ -1,9 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package taxcalculatorapp;
-
 import java.util.Collection;
 import java.util.InputMismatchException;
 import java.util.List;
@@ -24,13 +18,11 @@ public class Admin extends User {
     public void setAdminTitle(String adminTitle) {
         this.adminTitle = adminTitle;
     }
-    
+
     @Override
-     public void handleAdminActions() {
+    public void handleAdminActions() {
         Scanner scanner = new Scanner(System.in);
         int choice = 0;
-
-        DatabaseReader databaseReader = new DatabaseReader();
 
         do {
             try {
@@ -83,7 +75,6 @@ public class Admin extends User {
         if (user instanceof RegularUser regularUser) {
             System.out.println("User: " + regularUser.getUsername());
 
-            // Use o método criado para obter os cálculos de impostos associados ao usuário
             List<TaxCalculation> taxCalculations = regularUser.getTaxCalculations();
 
             if (taxCalculations != null && !taxCalculations.isEmpty()) {
