@@ -8,10 +8,10 @@ package taxcalculatorapp;
  *
  * @author thiagogoncos
  */
-import static taxcalculatorapp.DatabaseSetup.DB_URL;
-import static taxcalculatorapp.DatabaseSetup.PASSWORD;
-import static taxcalculatorapp.DatabaseSetup.TABLE_NAME;
-import static taxcalculatorapp.DatabaseSetup.USER;
+import static testetrabalhosam.DatabaseSetup.DB_URL;
+import static testetrabalhosam.DatabaseSetup.PASSWORD;
+import static testetrabalhosam.DatabaseSetup.TABLE_NAME;
+import static testetrabalhosam.DatabaseSetup.USER;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -29,7 +29,6 @@ public class DatabaseWriter extends Database {
                 "INSERT INTO " + TABLE_NAME + " (username, password, name, surname, jobRole, userType) VALUES (?, ?, ?, ?, ?, ?)"
             );
         ) {
-            // Verifica se o usuário já existe
             checkUserStmt.setString(1, user.getUsername());
             ResultSet existingUser = checkUserStmt.executeQuery();
 
@@ -38,7 +37,6 @@ public class DatabaseWriter extends Database {
                 return false;
             }
 
-            // O usuário não existe, prossiga com a inserção
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getPassword());
             stmt.setString(3, user.getName());
@@ -49,7 +47,6 @@ public class DatabaseWriter extends Database {
             stmt.executeUpdate();
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();  // Trate a exceção de forma adequada
             return false;
         }
     }
