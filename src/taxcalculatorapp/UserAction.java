@@ -4,11 +4,6 @@
  */
 package taxcalculatorapp;
 
-/**
- *
- * @author thiagogoncos
- */
-
 // Enum representing various actions that can be performed by an Admin
 public enum UserAction {
     

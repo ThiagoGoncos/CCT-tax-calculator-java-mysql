@@ -4,11 +4,7 @@
  */
 package taxcalculatorapp;
 
-/**
- *
- * @author thiagogoncos
- */
-
+// Definition of an interface named TaxCalculator
 interface TaxCalculator {
 
     // Method to calculate income tax based on gross income and tax credits

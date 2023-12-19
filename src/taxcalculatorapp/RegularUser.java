@@ -9,11 +9,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- *
- * @author thiagogoncos
- */
-
 // Definition of a class representing a regular user, extending the User class
 public class RegularUser extends User {
 

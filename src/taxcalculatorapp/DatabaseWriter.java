@@ -15,12 +15,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-/**
- *
- * @author thiagogoncos
- */
-
-
 // Definition of a class responsible for writing user data and taxes to the database
 public class DatabaseWriter extends Database {
 

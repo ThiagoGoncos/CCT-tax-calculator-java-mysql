@@ -4,14 +4,10 @@
  */
 package taxcalculatorapp;
 
-/**
- *
- * @author thiagogoncos
- */
+// Class responsible for handling user login functionality
 
 import java.util.Scanner;
 
-// Class responsible for handling user login functionality
 public class UserLogin {
 
     // Method to perform user login

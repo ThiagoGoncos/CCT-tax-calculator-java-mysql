@@ -6,11 +6,6 @@ package taxcalculatorapp;
 
 import java.util.Scanner;
 
-/**
- *
- * @author thiagogoncos
- */
-
 // Class responsible for handling user registration functionality
 public class UserRegistration {
 

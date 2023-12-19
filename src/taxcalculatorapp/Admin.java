@@ -9,11 +9,6 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
-/**
- *
- * @author thiagogoncos
- */
-
 // Definition of the Admin class that extends the User class
 public class Admin extends User {
 

@@ -9,6 +9,7 @@ package taxcalculatorapp;
  * @author thiagogoncos
  */
 
+// Definition of a class representing a TaxCalculation
 public class TaxCalculation {
 
     // Fields to store various tax-related values

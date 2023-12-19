@@ -8,11 +8,6 @@ import java.sql.SQLException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-/**
- *
- * @author thiagogoncos
- */
-
 // Main class for the Tax Calculator application
 public class TaxCalculatorApp {
 

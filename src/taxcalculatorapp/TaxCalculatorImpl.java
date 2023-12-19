@@ -4,11 +4,8 @@
  */
 package taxcalculatorapp;
 
-/**
- *
- * @author thiagogoncos
- */
-
+// Classe TaxCalculatorImpl
+// Implementation of the TaxCalculator interface
 public class TaxCalculatorImpl implements TaxCalculator {
 
     // Method to calculate income tax based on gross income and tax credits
