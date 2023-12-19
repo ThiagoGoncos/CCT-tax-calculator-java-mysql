@@ -1,0 +1,65 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package taxcalculatorapp;
+
+/**
+ *
+ * @author thiagogoncos
+ */
+
+import static testetrabalhosam.DatabaseSetup.DB_URL;
+import static testetrabalhosam.DatabaseSetup.PASSWORD;
+import static testetrabalhosam.DatabaseSetup.TABLE_NAME;
+import static testetrabalhosam.DatabaseSetup.USER;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+public class DatabaseWriter extends Database {
+
+    public boolean addUser(User user) {
+    try (
+        Connection conn = DriverManager.getConnection(DB_URL, USER, PASSWORD);
+        PreparedStatement stmt = conn.prepareStatement(
+            "INSERT INTO " + TABLE_NAME + " (username, password, name, surname, jobRole, userType) VALUES (?, ?, ?, ?, ?, ?)"
+        );
+    ) {
+        stmt.setString(1, user.getUsername());
+        stmt.setString(2, user.getPassword());
+        stmt.setString(3, user.getName());  // Adicione 'name' ao inserir um novo usuário
+        stmt.setString(4, user.getSurname());
+        stmt.setString(5, ((RegularUser) user).getJobRole()); // Cast para RegularUser para obter o jobRole
+        stmt.setString(6, user.getUserType().toString());
+
+        stmt.executeUpdate();
+        return true;
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
+    }
+}
+
+    public static void saveTaxCalculations(String username, double grossIncome, double taxCredits, double incomeTax, double usc, double prsi) {
+        try (
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASSWORD);
+            PreparedStatement stmt = conn.prepareStatement(
+                "INSERT INTO TaxTable (username, grossIncome, taxCredits, incomeTax, usc, prsi) VALUES (?, ?, ?, ?, ?, ?)"
+            );
+        ) {
+            stmt.setString(1, username);
+            stmt.setDouble(2, grossIncome);
+            stmt.setDouble(3, taxCredits);
+            stmt.setDouble(4, incomeTax);
+            stmt.setDouble(5, usc);
+            stmt.setDouble(6, prsi);
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+}
