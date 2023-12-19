@@ -24,6 +24,7 @@ public class TaxCalculatorApp {
             System.out.println("1. Login");
             System.out.println("2. Register");
             System.out.println("3. Exit");
+            System.out.println();
             System.out.print("Enter your choice: ");
             initialChoice = scanner.nextInt();
 
@@ -46,6 +47,7 @@ public class TaxCalculatorApp {
                     }
                 } else {
                     System.out.println("Authentication failed. Exiting application.");
+                    System.out.println();
                 }
                 break;
                 case 2:
@@ -56,12 +58,15 @@ public class TaxCalculatorApp {
                     break;
                 case 3:
                     System.out.println("Exiting application.");
+                    System.out.println();
                     break;
                 default:
                     System.out.println("Invalid choice. Please try again.");
             }
+            System.out.println();
        } catch (InputMismatchException e) {
             System.out.println("Invalid input. Please, enter a valid number.");
+            System.out.println();
             scanner.next();
             continue; 
         }
@@ -73,13 +78,18 @@ public class TaxCalculatorApp {
     int choice;
 
     do {
+        System.out.println();
         System.out.println("Admin actions:");
         for (UserAction action : UserAction.values()) {
             System.out.println(action.ordinal() + 1 + ". " + action.getDescription());
         }
+        
+        System.out.println();
 
         System.out.println("Admin Information:");
         System.out.println(admin.toString());
+        
+        System.out.println();
 
         System.out.print("Enter your choice: ");
         choice = scanner.nextInt();
@@ -116,12 +126,15 @@ public class TaxCalculatorApp {
                     break;
                 case EXIT:
                     System.out.println("Exiting admin actions.");
+                    System.out.println();
                     break;
                 default:
-                    System.out.println("Invalid choice. Please try again.");
+                    System.out.println("Invalid choice. Please try again.");         
             }
+            System.out.println();
         } else {
             System.out.println("Invalid choice. Please try again.");
+            
         }
     } while (choice != UserAction.EXIT.ordinal() + 1);
 }
@@ -150,37 +163,47 @@ private static void reviewOperations(Admin admin) {
  
 
     private static void handleRegularUserActions(RegularUser regularUser) {
-        Scanner scanner = new Scanner(System.in);
-        int choice;
+    Scanner scanner = new Scanner(System.in);
+    int choice;
 
-        do {
-            System.out.println("Regular user actions:");
-            System.out.println("1. Modify profile");
-            System.out.println("2. Calculate and Save taxes");
-            System.out.println("3. Exit");
+    do {
+        System.out.println();
+        System.out.println("Regular user actions:");
+        System.out.println("1. Modify profile");
+        System.out.println("2. Calculate and Save taxes");
+        System.out.println("3. Exit");
 
-            System.out.println("User Information:");
-            System.out.println(regularUser.toString());
+        System.out.println();
+        System.out.println("User Information:");
+        System.out.println(regularUser.toString());
 
-            System.out.print("Enter your choice: ");
-            choice = scanner.nextInt();
+        System.out.println();
+        System.out.print("Enter your choice: ");
+        choice = scanner.nextInt();
 
-            switch (choice) {
-                case 1:
-                    modifyUserProfile(regularUser);
-                    break;
-                case 2:
-                    calculateAndSaveTaxes(regularUser);
-                    break;
-                case 3:
-                    System.out.println("Exiting regular user actions.");
-                    break;
-                default:
-                    System.out.println("Invalid choice. Please try again.");
-            }
-
-        } while (choice != 3);
-    }
+        switch (choice) {
+            case 1:
+                modifyUserProfile(regularUser);
+                break;
+            case 2:
+                // Obtendo valores de grossIncome e taxCredits
+                System.out.print("Enter gross income: ");
+                double grossIncome = scanner.nextDouble();
+                System.out.print("Enter tax credits: ");
+                double taxCredits = scanner.nextDouble();
+                
+                calculateAndSaveTaxes(regularUser, grossIncome, taxCredits);
+                break;
+            case 3:
+                System.out.println("Exiting regular user actions.");
+                System.out.println();
+                break;
+            default:
+                System.out.println("Invalid choice. Please try again.");
+                System.out.println();
+        }
+    } while (choice != 3);
+}
 
     private static void modifyUserProfile(RegularUser regularUser) {
         Scanner scanner = new Scanner(System.in);
@@ -202,7 +225,7 @@ private static void reviewOperations(Admin admin) {
         System.out.println("User profile modified: " + regularUser.toString());
     }
 
-    private static void calculateAndSaveTaxes(RegularUser regularUser) {
-        regularUser.calculateAndSaveTaxes();
-    }
+    private static void calculateAndSaveTaxes(RegularUser regularUser, double grossIncome, double taxCredits) {
+    regularUser.calculateAndSaveTaxes(grossIncome, taxCredits);
+}
 }
