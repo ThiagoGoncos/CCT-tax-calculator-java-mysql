@@ -6,7 +6,7 @@ package taxcalculatorapp;
 
 /**
  *
- * @author thiagogoncos
+ * @author kelvindumas
  */
 public class UserLogin {
     public static User loginUser() {
@@ -18,19 +18,15 @@ public class UserLogin {
         System.out.print("Enter password: ");
         String password = scanner.next();
 
-        // Verifica se o usuário admin está tentando fazer login
-        if (username.equals("CCT") && password.equals("Dublin")) {
-            return Database.getUser(username);
-        }
+        DatabaseReader reader = new DatabaseReader();
+        User authenticatedUser = reader.getUser(username, password);
 
-        User authenticatedUser = Database.getUser(username);
-
-        if (authenticatedUser != null && authenticatedUser.getPassword().equals(password)) {
+        if (authenticatedUser != null) {
             System.out.println("User login successful: " + authenticatedUser.getUsername());
             return authenticatedUser;
         } else {
             System.out.println("Authentication failed. Please check your username and password.");
             return null;
-        }
-    }
+        }
+    }
 }
