@@ -1,14 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package taxcalculatorapp;
 import java.util.Scanner;
 
 /**
  *
- * @author thiagogoncos
+ * @author kelvindumas
  */
+
 public class UserRegistration {
 
     public static RegularUser registerUser() {
@@ -57,7 +53,7 @@ public class UserRegistration {
         System.out.print("Enter job role: ");
         String jobRole = scanner.next();
 
-        RegularUser newUser = new RegularUser(username, password, name, surname, jobRole);
+        RegularUser newUser = new RegularUser(username, password, name, surname, jobRole) {};
 
         DatabaseWriter databaseWriter = new DatabaseWriter();
 
