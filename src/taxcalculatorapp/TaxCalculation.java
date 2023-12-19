@@ -6,8 +6,40 @@ package taxcalculatorapp;
 
 /**
  *
- * @author thiagogoncos
+ * @author kelvindumas
  */
-public class TaxCalculation {
-    
+class TaxCalculation {
+    private double grossIncome;
+    private double taxCredits;
+    private double incomeTax;
+    private double usc;
+    private double prsi;
+
+    public TaxCalculation(double grossIncome, double taxCredits, double incomeTax, double usc, double prsi) {
+        this.grossIncome = grossIncome;
+        this.taxCredits = taxCredits;
+        this.incomeTax = incomeTax;
+        this.usc = usc;
+        this.prsi = prsi;
+    }
+
+    public double getGrossIncome() {
+        return grossIncome;
+    }
+
+    public double getTaxCredits() {
+        return taxCredits;
+    }
+
+    public double getIncomeTax() {
+        return incomeTax;
+    }
+
+    public double getUsc() {
+        return usc;
+    }
+
+    public double getPrsi() {
+        return prsi;
+    }
 }
