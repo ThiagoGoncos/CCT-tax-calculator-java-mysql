@@ -3,12 +3,18 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package taxcalculatorapp;
+import java.util.Scanner;
+import java.sql.SQLException;
+import java.util.Scanner;
+import java.sql.SQLException;
+
 
 /**
  *
  * @author kelvidumas
  */
-class Admin extends User {
+public class Admin extends User {
+
 	private String adminTitle;
 
 	public Admin(String username, String password, String name, String surname) {
@@ -34,7 +40,7 @@ class Admin extends User {
     	System.out.println("Admin privileges granted to user: " + user.getUsername());
 	}
 
-   private static void reviewOperations(Admin admin) {
+	private static void reviewOperations(Admin admin) {
 	Scanner scanner = new Scanner(System.in);
 
 	for (User user : Database.getAllUsers()) {
@@ -42,25 +48,38 @@ class Admin extends User {
         	RegularUser regularUser = (RegularUser) user;
         	System.out.println("Tax calculations for user " + regularUser.getUsername() + ":");
 
-        	System.out.print("Enter gross income for user " + regularUser.getUsername() + ": ");
-        	double grossIncome = scanner.nextDouble();
-        	System.out.print("Enter tax credits for user " + regularUser.getUsername() + ": ");
-        	double taxCredits = scanner.nextDouble();
-
-        	regularUser.calculateAndSaveTaxes(grossIncome, taxCredits);
-
         	for (TaxCalculation taxCalculation : regularUser.getTaxCalculations()) {
             	System.out.println(taxCalculationToString(taxCalculation));
         	}
     	}
 	}
-}
+	}
 
 	private static String taxCalculationToString(TaxCalculation taxCalculation) {
     	return "Gross Income: " + taxCalculation.getGrossIncome() +
-           	", Tax Credits: " + taxCalculation.getTaxCredits() +
-           	", Income Tax: " + taxCalculation.getIncomeTax() +
-           	", USC: " + taxCalculation.getUsc() +
-           	", PRSI: " + taxCalculation.getPrsi();
+            	", Tax Credits: " + taxCalculation.getTaxCredits() +
+            	", Income Tax: " + taxCalculation.getIncomeTax() +
+            	", USC: " + taxCalculation.getUsc() +
+            	", PRSI: " + taxCalculation.getPrsi();
+	}
+
+	public void saveUserToDatabase(User user) {
+    	DatabaseWriter writer = new DatabaseWriter();
+    	writer.addUser(user);
+	}
+
+	public static void main(String[] args) {
+    	// Adicione a seguinte linha para criar o usuário Admin
+    	Admin admin = new Admin("CCT", "Dublin", "AdminName", "AdminSurname");
+    	admin.setAdminTitle("AdminTitle"); // Defina o título do Admin, se necessário
+
+    	// Chame o método para salvar o Admin no banco de dados
+    	DatabaseWriter writer = new DatabaseWriter();
+    	writer.addUser(admin);
+	}
+
+	@Override
+	public String getJobRole() {
+    	return "Administrator";
 	}
 }
