@@ -4,25 +4,29 @@
  */
 package taxcalculatorapp;
 
+import java.sql.SQLException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
-/**
- *
- * @author kelvindumas
- */
+
+// Main class for the Tax Calculator application
 public class TaxCalculatorApp {
 
-    public static void main(String[] args) {
+    // Main method to start the application
+    public static void main(String[] args) throws SQLException {
+        // Set up the database and display the main menu
         DatabaseSetup.setupDatabase();
         showMainMenu();
     }
 
-    private static void showMainMenu() {
+    // Method to display the main menu and handle user choices
+    private static void showMainMenu() throws SQLException {
         Scanner scanner = new Scanner(System.in);
         int initialChoice = -1;
 
+        // Main loop for the application
         do {
             try {
+                // Display main menu options
                 System.out.println("1. Login");
                 System.out.println("2. Register");
                 System.out.println("3. Exit");
@@ -30,53 +34,56 @@ public class TaxCalculatorApp {
                 System.out.print("Enter your choice: ");
                 initialChoice = scanner.nextInt();
 
+                // Validate user input
                 if (initialChoice < 1 || initialChoice > 3) {
                     System.out.println("Invalid input. Please enter a number between 1 and 3.");
                     continue;
                 }
 
+                // Process user choice
                 switch (initialChoice) {
-                case 1 -> {
-                    User authenticatedUser = UserLogin.loginUser();
-                    if (authenticatedUser != null) {
-                        UserType userType = authenticatedUser.getUserType();
-                        if (userType == UserType.ADMIN) {
-                            Admin admin = (Admin) authenticatedUser;
-                            admin.handleAdminActions();  // Chama o método handleAdminActions para o Admin
+                    case 1 -> {
+                        // Login user and handle actions based on user type (Admin or Regular User)
+                        User authenticatedUser = UserLogin.loginUser();
+                        if (authenticatedUser != null) {
+                            UserType userType = authenticatedUser.getUserType();
+                            if (userType == UserType.ADMIN) {
+                                Admin admin = (Admin) authenticatedUser;
+                                admin.handleAdminActions();
+                            } else {
+                                RegularUser regularUser = (RegularUser) authenticatedUser;
+                                handleRegularUserActions(regularUser);
+                            }
                         } else {
-                            RegularUser regularUser = (RegularUser) authenticatedUser;
-                            handleRegularUserActions(regularUser);
+                            System.out.println("Authentication failed. Exiting application.");
+                            System.out.println();
                         }
-                    } else {
-                        System.out.println("Authentication failed. Exiting application.");
+                    }
+                    case 2 -> {
+                        // Register a new Regular User and handle user actions
+                        RegularUser newUser = UserRegistration.registerUser();
+                        if (newUser != null) {
+                            handleRegularUserActions(newUser);
+                        }
+                    }
+                    case 3 -> {
+                        // Exit the application
+                        System.out.println("Exiting application.");
                         System.out.println();
                     }
+                    default ->
+                        System.out.println("Invalid choice. Please try again.");
                 }
-                case 2 -> {
-                    RegularUser newUser = UserRegistration.registerUser();
-                    if (newUser != null) {
-                        handleRegularUserActions(newUser);
-                    }
-                }
-                case 3 -> {
-                    System.out.println("Exiting application.");
-                    System.out.println();
-                }
-                default -> System.out.println("Invalid choice. Please try again.");
+                System.out.println();
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please, enter a valid number.");
+                System.out.println();
+                scanner.next();
             }
-            System.out.println();
-        } catch (InputMismatchException e) {
-            System.out.println("Invalid input. Please, enter a valid number.");
-            System.out.println();
-            scanner.next();
-        }
-    } while (initialChoice != 3);
-}
-
-    private static void handleAdminActions(Admin admin) {
-        admin.handleAdminActions();
+        } while (initialChoice != 3);
     }
 
+    // Method to convert a TaxCalculation object to a string representation
     private static String taxCalculationToString(TaxCalculation taxCalculation) {
         return "Gross Income: " + taxCalculation.getGrossIncome()
                 + ", Tax Credits: " + taxCalculation.getTaxCredits()
@@ -85,10 +92,12 @@ public class TaxCalculatorApp {
                 + ", PRSI: " + taxCalculation.getPrsi();
     }
 
-    private static void handleRegularUserActions(RegularUser regularUser) {
+    // Method to handle actions for a Regular User
+    private static void handleRegularUserActions(RegularUser regularUser) throws SQLException {
         Scanner scanner = new Scanner(System.in);
         int choice;
 
+        // Regular User actions loop
         do {
             System.out.println();
             System.out.println("Regular user actions:");
@@ -104,9 +113,13 @@ public class TaxCalculatorApp {
             System.out.print("Enter your choice: ");
             choice = scanner.nextInt();
 
+            // Process Regular User choices
             switch (choice) {
-                case 1 -> modifyUserProfile(regularUser);
+                case 1 ->
+                    // Modify user profile
+                    modifyUserProfile(regularUser);
                 case 2 -> {
+                    // Calculate and save taxes
                     System.out.print("Enter gross income: ");
                     double grossIncome = scanner.nextDouble();
                     System.out.print("Enter tax credits: ");
@@ -115,6 +128,7 @@ public class TaxCalculatorApp {
                     calculateAndSaveTaxes(regularUser, grossIncome, taxCredits);
                 }
                 case 3 -> {
+                    // Exit Regular User actions
                     System.out.println("Exiting regular user actions.");
                     System.out.println();
                 }
@@ -126,6 +140,7 @@ public class TaxCalculatorApp {
         } while (choice != 3);
     }
 
+    // Method to modify the profile of a Regular User
     private static void modifyUserProfile(RegularUser regularUser) {
         Scanner scanner = new Scanner(System.in);
 
@@ -138,6 +153,7 @@ public class TaxCalculatorApp {
         System.out.print("Enter new surname: ");
         String newSurname = scanner.next();
 
+        // Modify Regular User profile and update the database
         regularUser.modifyProfile(newName, newSurname);
         regularUser.setUsername(newUsername);
         regularUser.setPassword(newPassword);
@@ -145,12 +161,15 @@ public class TaxCalculatorApp {
         Database.storeUser(regularUser);
     }
 
-    private static void calculateAndSaveTaxes(RegularUser regularUser, double grossIncome, double taxCredits) {
-        TaxCalculation taxCalculation = regularUser.calculateTaxes(grossIncome, taxCredits);
+    // Method to calculate and save taxes for a Regular User
+    private static void calculateAndSaveTaxes(RegularUser regularUser, double grossIncome, double taxCredits) throws SQLException {
+        TaxCalculation taxCalculation = regularUser.calculateAndSaveTaxes(grossIncome, taxCredits);
 
+        // Display tax calculation details
         System.out.println("Tax calculation for user " + regularUser.getUsername() + ":");
         System.out.println(taxCalculationToString(taxCalculation));
 
+        // Save user data and taxes to the database
         DatabaseWriter.saveUserDataAndTaxes(regularUser, grossIncome, taxCredits,
                 taxCalculation.getIncomeTax(), taxCalculation.getUsc(), taxCalculation.getPrsi());
     }

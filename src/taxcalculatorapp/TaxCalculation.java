@@ -6,16 +6,20 @@ package taxcalculatorapp;
 
 /**
  *
- * @author kelvindumas
+ * @author thiagogoncos
  */
-class TaxCalculation {
+// Classe TaxCalculation
+// Definition of a class representing a TaxCalculation
+public class TaxCalculation {
 
-    private final double grossIncome;
-    private final double taxCredits;
-    private final double incomeTax;
-    private final double usc;
-    private final double prsi;
+    // Fields to store various tax-related values
+    private final double grossIncome; // Gross income of the individual
+    private final double taxCredits; // Tax credits associated with the individual
+    private final double incomeTax; // Calculated income tax amount
+    private final double usc; // Calculated Universal Social Charge (USC)
+    private final double prsi; // Calculated Pay-Related Social Insurance (PRSI)
 
+    // Constructor to initialize a TaxCalculation object with specified attributes
     public TaxCalculation(double grossIncome, double taxCredits, double incomeTax, double usc, double prsi) {
         this.grossIncome = grossIncome;
         this.taxCredits = taxCredits;
@@ -24,22 +28,27 @@ class TaxCalculation {
         this.prsi = prsi;
     }
 
+    // Getter method to retrieve the gross income value
     public double getGrossIncome() {
         return grossIncome;
     }
 
+    // Getter method to retrieve the tax credits value
     public double getTaxCredits() {
         return taxCredits;
     }
 
+    // Getter method to retrieve the income tax value
     public double getIncomeTax() {
         return incomeTax;
     }
 
+    // Getter method to retrieve the USC value
     public double getUsc() {
         return usc;
     }
 
+    // Getter method to retrieve the PRSI value
     public double getPrsi() {
         return prsi;
     }
