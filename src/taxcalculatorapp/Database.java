@@ -4,11 +4,16 @@
  */
 package taxcalculatorapp;
 
-/**
- *
- * @author kelvindumas
- */
-class Database {
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
+public abstract class Database {
     private static Map<String, User> userDatabase = new HashMap<>();
 
     static {
@@ -17,8 +22,8 @@ class Database {
     }
 
     public static Collection<User> getAllUsers() {
-        return userDatabase.values();
-    }
+    return userDatabase.values();
+}
 
     public static void saveTaxCalculations(RegularUser regularUser, TaxCalculation taxCalculation) {
         regularUser.saveTaxCalculation(taxCalculation);
@@ -39,9 +44,28 @@ class Database {
     }
 
     public static void displayAllUsers() {
+    Collection<User> allUsers = getAllUsers();
+
+    if (allUsers.isEmpty()) {
+        System.out.println("No users in the database.");
+    } else {
         System.out.println("Users in the database:");
-        for (User user : userDatabase.values()) {
+        for (User user : allUsers) {
             System.out.println(user);
-        }
-    }
+        }
+    }
+}
+
+    public static void setupDatabase() {
+        DatabaseSetup.setupDatabase();
+    }
+
+    // Adicione o método para autenticar usuários
+    public static User authenticateUser(String username, String password) {
+        User user = getUser(username);
+        if (user != null && user.getPassword().equals(password)) {
+            return user;
+        }
+        return null;
+    }
 }
