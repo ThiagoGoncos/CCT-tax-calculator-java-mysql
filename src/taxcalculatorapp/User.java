@@ -10,71 +10,74 @@ package taxcalculatorapp;
  */
 
 public abstract class User {
-	private String username;
-	private String password;
-	private String name;
-	private String surname;
-	private UserType userType;
 
-	public User(String username, String password, String name, String surname, UserType userType) {
-    	this.username = username;
-    	this.password = password;
-    	this.name = name;
-    	this.surname = surname;
-    	this.userType = userType;
-	}
+    private String username;
+    private String password;
+    private String name;
+    private String surname;
+    private UserType userType;
 
-	public String getUsername() {
-    	return username;
-	}
+    public User(String username, String password, String name, String surname, UserType userType) {
+        this.username = username;
+        this.password = password;
+        this.name = name;
+        this.surname = surname;
+        this.userType = userType;
+    }
 
-	public void setUsername(String username) {
-    	this.username = username;
-	}
+    public String getUsername() {
+        return username;
+    }
 
-	public String getPassword() {
-    	return password;
-	}
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
-	public void setPassword(String password) {
-    	this.password = password;
-	}
+    public String getPassword() {
+        return password;
+    }
 
-	public String getName() {
-    	return name;
-	}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
-	public void setName(String name) {
-    	this.name = name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getSurname() {
-    	return surname;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setSurname(String surname) {
-    	this.surname = surname;
-	}
+    public String getSurname() {
+        return surname;
+    }
 
-	public UserType getUserType() {
-    	return userType;
-	}
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
 
-	public void setUserType(UserType userType) {
-    	this.userType = userType;
-	}
+    public UserType getUserType() {
+        return userType;
+    }
 
-	public abstract void modifyProfile(String name, String surname);
+    public void setUserType(UserType userType) {
+        this.userType = userType;
+    }
 
-	public abstract String getJobRole();
+    public abstract void handleAdminActions();
+    
+    public abstract void modifyProfile(String name, String surname);
 
-	@Override
-	public String toString() {
-    	return "User{" +
-            	"username='" + username + '\'' +
-            	", password='" + password + '\'' +
-            	", name='" + name + '\'' +
-            	", surname='" + surname + '\'' +
-            	'}';
-	}
+    public abstract String getJobRole();
+
+    @Override
+    public String toString() {
+        return "User{"
+                + "username='" + username + '\''
+                + ", password='" + password + '\''
+                + ", name='" + name + '\''
+                + ", surname='" + surname + '\''
+                + '}';
+    }
 }

@@ -6,7 +6,7 @@ package taxcalculatorapp;
 
 /**
  *
- * @author kelvindumas
+ * @author thiagogoncos
  */
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -26,7 +26,6 @@ public class DatabaseSetup {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
     }
 
@@ -43,12 +42,15 @@ public class DatabaseSetup {
 
             createTable();
         } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
 
     public static void createTable() {
-        String createTableSQL = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " ("
+        try (
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASSWORD);
+            Statement stmt = conn.createStatement();
+        ) {
+            String createTableSQL = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " ("
                 + "id INT AUTO_INCREMENT PRIMARY KEY,"
                 + "username VARCHAR(50) NOT NULL,"
                 + "password VARCHAR(50) NOT NULL,"
@@ -56,9 +58,9 @@ public class DatabaseSetup {
                 + "surname VARCHAR(50),"
                 + "jobRole VARCHAR(50),"
                 + "userType VARCHAR(20) NOT NULL)";
-        executeUpdate(createTableSQL);
+            executeUpdate(conn, createTableSQL);
 
-        String createTaxTableSQL = "CREATE TABLE IF NOT EXISTS TaxTable ("
+            String createTaxTableSQL = "CREATE TABLE IF NOT EXISTS TaxTable ("
                 + "id INT AUTO_INCREMENT PRIMARY KEY,"
                 + "username VARCHAR(50) NOT NULL,"
                 + "grossIncome DOUBLE NOT NULL,"
@@ -66,16 +68,19 @@ public class DatabaseSetup {
                 + "incomeTax DOUBLE NOT NULL,"
                 + "usc DOUBLE NOT NULL,"
                 + "prsi DOUBLE NOT NULL)";
-        executeUpdate(createTaxTableSQL);
+            executeUpdate(conn, createTaxTableSQL);
 
-        System.out.println("Table '" + TABLE_NAME + "' created successfully.");
+            System.out.println("Table '" + TABLE_NAME + "' created successfully.");
+        } catch (SQLException e) {
+            e.printStackTrace();  // Trate a exceção de forma adequada
+        }
     }
 
-    private static void executeUpdate(String sql) {
-        try ( Connection conn = DriverManager.getConnection(DB_URL, USER, PASSWORD);  Statement stmt = conn.createStatement()) {
+    private static void executeUpdate(Connection conn, String sql) {
+        try (Statement stmt = conn.createStatement()) {
             stmt.executeUpdate(sql);
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.printStackTrace();  // Trate a exceção de forma adequada
         }
     }
 }

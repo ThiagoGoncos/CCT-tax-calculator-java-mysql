@@ -8,10 +8,10 @@ package taxcalculatorapp;
  *
  * @author thiagogoncos
  */
-import static testetrabalhosam.DatabaseSetup.DB_URL;
-import static testetrabalhosam.DatabaseSetup.PASSWORD;
-import static testetrabalhosam.DatabaseSetup.TABLE_NAME;
-import static testetrabalhosam.DatabaseSetup.USER;
+import static taxcalculatorapp.DatabaseSetup.DB_URL;
+import static taxcalculatorapp.DatabaseSetup.PASSWORD;
+import static taxcalculatorapp.DatabaseSetup.TABLE_NAME;
+import static taxcalculatorapp.DatabaseSetup.USER;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -23,9 +23,22 @@ public class DatabaseWriter extends Database {
 
     public boolean addUser(User user) {
         try (
-                 Connection conn = DriverManager.getConnection(DB_URL, USER, PASSWORD);  PreparedStatement stmt = conn.prepareStatement(
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASSWORD);
+            PreparedStatement checkUserStmt = conn.prepareStatement("SELECT * FROM " + TABLE_NAME + " WHERE username = ?");
+            PreparedStatement stmt = conn.prepareStatement(
                 "INSERT INTO " + TABLE_NAME + " (username, password, name, surname, jobRole, userType) VALUES (?, ?, ?, ?, ?, ?)"
-        );) {
+            );
+        ) {
+            // Verifica se o usuário já existe
+            checkUserStmt.setString(1, user.getUsername());
+            ResultSet existingUser = checkUserStmt.executeQuery();
+
+            if (existingUser.next()) {
+                System.out.println("User already exists!");
+                return false;
+            }
+
+            // O usuário não existe, prossiga com a inserção
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getPassword());
             stmt.setString(3, user.getName());
@@ -36,10 +49,11 @@ public class DatabaseWriter extends Database {
             stmt.executeUpdate();
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.printStackTrace();  // Trate a exceção de forma adequada
             return false;
         }
     }
+
 
     public static boolean saveUserDataAndTaxes(RegularUser regularUser, double grossIncome, double taxCredits,
             double incomeTax, double usc, double prsi) {
@@ -60,13 +74,12 @@ public class DatabaseWriter extends Database {
             userStmt.setString(6, regularUser.getUserType().toString());
 
             int affectedRows = userStmt.executeUpdate();
-            if (affectedRows == 0) {
-                throw new SQLException("Creating user failed, no rows affected.");
-            }
+    if (affectedRows == 0) {
+        throw new SQLException("Creating user failed, no rows affected.");
+    }
 
-            try ( ResultSet generatedKeys = userStmt.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    int userId = generatedKeys.getInt(1);
+    try (ResultSet generatedKeys = userStmt.getGeneratedKeys()) {
+        if (generatedKeys.next()) {
 
                     taxStmt.setString(1, regularUser.getUsername());
                     taxStmt.setDouble(2, grossIncome);
@@ -76,6 +89,8 @@ public class DatabaseWriter extends Database {
                     taxStmt.setDouble(6, prsi);
 
                     taxStmt.executeUpdate();
+                    
+                    Database.storeUser(regularUser);
 
                     conn.commit();
                     conn.setAutoCommit(true);
@@ -87,7 +102,6 @@ public class DatabaseWriter extends Database {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
             return false;
         }
     }

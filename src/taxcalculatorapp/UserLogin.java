@@ -4,11 +4,14 @@
  */
 package taxcalculatorapp;
 
+import java.util.Scanner;
+
 /**
  *
  * @author kelvindumas
  */
 public class UserLogin {
+
     public static User loginUser() {
         Scanner scanner = new Scanner(System.in);
 
@@ -27,6 +30,6 @@ public class UserLogin {
         } else {
             System.out.println("Authentication failed. Please check your username and password.");
             return null;
-        }
-    }
+        }
+    }
 }

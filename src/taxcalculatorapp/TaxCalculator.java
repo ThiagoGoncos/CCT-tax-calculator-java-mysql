@@ -8,9 +8,13 @@ package taxcalculatorapp;
  *
  * @author thiagogoncos
  */
-public interface TaxCalculator {
+interface TaxCalculator {
+
     double calculateIncomeTax(double grossIncome, double taxCredits);
+
     double calculateUSC(double grossIncome);
+
     double calculatePRSI(double grossIncome);
+
     double calculateTotalTax(double grossIncome, double taxCredits);
 }

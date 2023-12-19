@@ -9,15 +9,16 @@ package taxcalculatorapp;
  * @author kelvindumas
  */
 class TaxCalculatorImpl implements TaxCalculator {
+
     @Override
     public double calculateIncomeTax(double grossIncome, double taxCredits) {
         double taxableIncome = grossIncome - taxCredits;
 
         double payeRate;
         if (grossIncome <= 40000) {
-            payeRate = 0.2; // 20%
+            payeRate = 0.2;
         } else {
-            payeRate = 0.4; // 40%
+            payeRate = 0.4;
         }
         return taxableIncome * payeRate;
     }
@@ -29,11 +30,11 @@ class TaxCalculatorImpl implements TaxCalculator {
         if (grossIncome <= 12012) {
             uscRate = 0.0;
         } else if (grossIncome <= 22920) {
-            uscRate = 0.005; // 0.5%
+            uscRate = 0.005;
         } else if (grossIncome <= 70044) {
-            uscRate = 0.02; // 2%
+            uscRate = 0.02;
         } else {
-            uscRate = 0.04; // 4%
+            uscRate = 0.04;
         }
 
         return grossIncome * uscRate;
@@ -44,7 +45,7 @@ class TaxCalculatorImpl implements TaxCalculator {
         double prsiRate = 0.0;
 
         if (grossIncome > 18354.30) {
-            prsiRate = 0.04; // 4%
+            prsiRate = 0.04;
         }
 
         return grossIncome * prsiRate;

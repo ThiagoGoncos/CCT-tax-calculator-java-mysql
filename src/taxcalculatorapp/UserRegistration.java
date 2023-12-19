@@ -75,7 +75,7 @@ public class UserRegistration {
     private static boolean isValidPassword(String password) {
         int letterCount = 0;
         int digitCount = 0;
-        for (char ch : password.toCharArray()) {
+        for (var ch : password.toCharArray()) {
             if (Character.isLetter(ch)) {
                 letterCount++;
             } else if (Character.isDigit(ch)) {

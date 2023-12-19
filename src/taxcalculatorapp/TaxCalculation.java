@@ -9,11 +9,12 @@ package taxcalculatorapp;
  * @author kelvindumas
  */
 class TaxCalculation {
-    private double grossIncome;
-    private double taxCredits;
-    private double incomeTax;
-    private double usc;
-    private double prsi;
+
+    private final double grossIncome;
+    private final double taxCredits;
+    private final double incomeTax;
+    private final double usc;
+    private final double prsi;
 
     public TaxCalculation(double grossIncome, double taxCredits, double incomeTax, double usc, double prsi) {
         this.grossIncome = grossIncome;
@@ -40,6 +41,6 @@ class TaxCalculation {
     }
 
     public double getPrsi() {
-        return prsi;
-    }
+        return prsi;
+    }
 }

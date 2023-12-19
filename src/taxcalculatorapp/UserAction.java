@@ -8,7 +8,7 @@ package taxcalculatorapp;
  *
  * @author thiagogoncos
  */
-enum UserAction {
+public enum UserAction {
     MODIFY_PROFILE("Modify Profile"),
     ACCESS_USERS_LIST("Access Users List"),
     REMOVE_USER("Remove User"),
