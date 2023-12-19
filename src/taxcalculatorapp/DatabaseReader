@@ -11,7 +11,6 @@ import static testetrabalhosam.DatabaseSetup.USER;
 public class DatabaseReader extends Database {
 
     public User getUser(String username, String password) {
-        // Verifica se o usuário está no banco de dados e se a senha está correta
         User user = Database.getUser(username);
 
         if (user != null && user.getPassword().equals(password)) {
@@ -19,29 +18,29 @@ public class DatabaseReader extends Database {
         } else {
             return null;
         }
-}
-
-    private User createRegularUserFromResultSet(ResultSet results) throws SQLException {
-        String username = results.getString("username");
-        String password = results.getString("password");
-        String name = results.getString("name");
-        String surname = results.getString("surname");
-        String jobRole = results.getString("jobRole");
-
-        RegularUser regularUser = new RegularUser(username, password, name, surname, jobRole);
-        return regularUser;
     }
 
-    private User createAdminFromResultSet(ResultSet results) throws SQLException {
-        String username = results.getString("username");
-        String password = results.getString("password");
-        String name = results.getString("name");
-        String surname = results.getString("surname");
+    public void reviewOperations(Admin admin) {
+        System.out.println("Tax calculations for all users:");
 
-        Admin admin = new Admin(username, password, name, surname);
-        return admin;
+        for (User user : Database.getAllUsers()) {
+            if (user instanceof RegularUser) {
+                RegularUser regularUser = (RegularUser) user;
+                System.out.println("User: " + regularUser.getUsername());
+
+                for (TaxCalculation taxCalculation : regularUser.getTaxCalculations()) {
+                    System.out.println(taxCalculationToString(taxCalculation));
+                }
+                System.out.println();
+            }
+        }
     }
 
-    // Adicione outros métodos conforme necessário
-
+    private String taxCalculationToString(TaxCalculation taxCalculation) {
+        return "Gross Income: " + taxCalculation.getGrossIncome()
+                + ", Tax Credits: " + taxCalculation.getTaxCredits()
+                + ", Income Tax: " + taxCalculation.getIncomeTax()
+                + ", USC: " + taxCalculation.getUsc()
+                + ", PRSI: " + taxCalculation.getPrsi();
+    }
 }
