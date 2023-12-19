@@ -10,7 +10,7 @@ import java.util.Scanner;
  *
  * @author kelvindumas
  */
-ppublic class TaxCalculatorApp {
+public class TaxCalculatorApp {
 
 	public static void main(String[] args) {
     	DatabaseSetup.setupDatabase();
