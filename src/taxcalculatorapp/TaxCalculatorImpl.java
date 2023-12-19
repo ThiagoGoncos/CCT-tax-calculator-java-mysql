@@ -12,19 +12,41 @@ class TaxCalculatorImpl implements TaxCalculator {
     @Override
     public double calculateIncomeTax(double grossIncome, double taxCredits) {
         double taxableIncome = grossIncome - taxCredits;
-        double incomeTaxRate = 0.20;
-        return taxableIncome * incomeTaxRate;
+
+        double payeRate;
+        if (grossIncome <= 40000) {
+            payeRate = 0.2; // 20%
+        } else {
+            payeRate = 0.4; // 40%
+        }
+        return taxableIncome * payeRate;
     }
 
     @Override
     public double calculateUSC(double grossIncome) {
-        double uscRate = 0.05;
+        double uscRate;
+
+        if (grossIncome <= 12012) {
+            uscRate = 0.0;
+        } else if (grossIncome <= 22920) {
+            uscRate = 0.005; // 0.5%
+        } else if (grossIncome <= 70044) {
+            uscRate = 0.02; // 2%
+        } else {
+            uscRate = 0.04; // 4%
+        }
+
         return grossIncome * uscRate;
     }
 
     @Override
     public double calculatePRSI(double grossIncome) {
-        double prsiRate = 0.03;
+        double prsiRate = 0.0;
+
+        if (grossIncome > 18354.30) {
+            prsiRate = 0.04; // 4%
+        }
+
         return grossIncome * prsiRate;
     }
 
