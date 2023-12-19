@@ -6,8 +6,8 @@ package taxcalculatorapp;
 
 /**
  *
- * @author thiagogoncos
+ * @author kelvindumas
  */
-public interface UserActions {
-    
+interface UserActions {
+    void modifyProfile(String name, String surname);
 }
