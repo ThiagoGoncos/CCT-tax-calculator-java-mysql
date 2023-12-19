@@ -4,6 +4,8 @@
  */
 package taxcalculatorapp;
 
+import java.util.InputMismatchException;
+import java.util.Scanner;
 /**
  *
  * @author thiagogoncos
@@ -14,31 +16,38 @@ public class TaxCalculatorApp {
     }
 
     private static void showMainMenu() {
-        Scanner scanner = new Scanner(System.in);
-        int initialChoice;
+    Scanner scanner = new Scanner(System.in);
+    int initialChoice = -1;
 
-        do {
+    do {
+        try {
             System.out.println("1. Login");
             System.out.println("2. Register");
             System.out.println("3. Exit");
             System.out.print("Enter your choice: ");
             initialChoice = scanner.nextInt();
 
+            if (initialChoice < 1 || initialChoice > 3) {
+                System.out.println("Invalid input. Please enter a number between 1 and 3.");
+                continue;
+            }
+
             switch (initialChoice) {
-                case 1:
-                    User authenticatedUser = UserLogin.loginUser();
-                    if (authenticatedUser != null) {
-                        if (authenticatedUser instanceof Admin) {
-                            Admin admin = (Admin) authenticatedUser;
-                            handleAdminActions(admin);
-                        } else {
-                            RegularUser regularUser = (RegularUser) authenticatedUser;
-                            handleRegularUserActions(regularUser);
-                        }
+            case 1:
+                User authenticatedUser = UserLogin.loginUser();
+                if (authenticatedUser != null) {
+                    UserType userType = authenticatedUser.getUserType();
+                    if (userType == UserType.ADMIN) {
+                        Admin admin = (Admin) authenticatedUser;
+                        handleAdminActions(admin);
                     } else {
-                        System.out.println("Authentication failed. Exiting application.");
+                        RegularUser regularUser = (RegularUser) authenticatedUser;
+                        handleRegularUserActions(regularUser);
                     }
-                    break;
+                } else {
+                    System.out.println("Authentication failed. Exiting application.");
+                }
+                break;
                 case 2:
                     RegularUser newUser = UserRegistration.registerUser();
                     if (newUser != null) {
@@ -51,31 +60,34 @@ public class TaxCalculatorApp {
                 default:
                     System.out.println("Invalid choice. Please try again.");
             }
-        } while (initialChoice != 3);
-    }
+       } catch (InputMismatchException e) {
+            System.out.println("Invalid input. Please, enter a valid number.");
+            scanner.next();
+            continue; 
+        }
+    } while (initialChoice != 3);
+}
 
     private static void handleAdminActions(Admin admin) {
-        Scanner scanner = new Scanner(System.in);
-        int choice;
+    Scanner scanner = new Scanner(System.in);
+    int choice;
 
-        do {
-            System.out.println("Admin actions:");
-            System.out.println("1. Modify profile");
-            System.out.println("2. Access list of users");
-            System.out.println("3. Remove user");
-            System.out.println("4. Review operations");
-            System.out.println("5. Exit");
+    do {
+        System.out.println("Admin actions:");
+        for (UserAction action : UserAction.values()) {
+            System.out.println(action.ordinal() + 1 + ". " + action.getDescription());
+        }
 
-            // Mostra informações pessoais do admin
-            System.out.println("Admin Information:");
-            System.out.println(admin.toString());
+        System.out.println("Admin Information:");
+        System.out.println(admin.toString());
 
-            System.out.print("Enter your choice: ");
-            choice = scanner.nextInt();
+        System.out.print("Enter your choice: ");
+        choice = scanner.nextInt();
 
-            switch (choice) {
-                case 1:
-                    // Lógica para modificar o perfil do admin
+        if (choice > 0 && choice <= UserAction.values().length) {
+            UserAction selectedAction = UserAction.values()[choice - 1];
+            switch (selectedAction) {
+                case MODIFY_PROFILE:
                     System.out.print("Enter new username: ");
                     String newUsername = scanner.next();
                     System.out.print("Enter new password: ");
@@ -85,39 +97,36 @@ public class TaxCalculatorApp {
                     System.out.print("Enter new surname: ");
                     String newSurname = scanner.next();
 
-                    // Atualizar as informações do admin
                     admin.modifyProfile(newName, newSurname);
                     admin.setUsername(newUsername);
                     admin.setPassword(newPassword);
 
-                    // Atualizar as informações na base de dados
                     Database.storeUser(admin);
                     break;
-                case 2:
-                    // Lógica para acessar lista de usuários
+                case ACCESS_USERS_LIST:
                     Database.displayAllUsers();
                     break;
-                case 3:
-                    // Lógica para remover usuário
+                case REMOVE_USER:
                     System.out.print("Enter username to remove: ");
                     String usernameToRemove = scanner.next();
                     Database.removeUser(usernameToRemove);
                     break;
-                case 4:
-                    // Lógica para revisar operações e visualizar cálculos de impostos salvos
+                case REVIEW_OPERATIONS:
                     reviewOperations(admin);
                     break;
-                case 5:
+                case EXIT:
                     System.out.println("Exiting admin actions.");
                     break;
                 default:
                     System.out.println("Invalid choice. Please try again.");
             }
-
-        } while (choice != 5);
-    }
+        } else {
+            System.out.println("Invalid choice. Please try again.");
+        }
+    } while (choice != UserAction.EXIT.ordinal() + 1);
+}
+    
 private static void reviewOperations(Admin admin) {
-        // Mostrar cálculos de impostos salvos por todos os usuários
         for (User user : Database.getAllUsers()) {
             if (user instanceof RegularUser) {
                 RegularUser regularUser = (RegularUser) user;
@@ -185,12 +194,10 @@ private static void reviewOperations(Admin admin) {
         System.out.print("Enter new surname: ");
         String newSurname = scanner.next();
 
-        // Modificar o perfil do usuário
         regularUser.modifyProfile(newName, newSurname);
         regularUser.setUsername(newUsername);
         regularUser.setPassword(newPassword);
 
-        // Atualizar as informações na base de dados
         Database.storeUser(regularUser);
         System.out.println("User profile modified: " + regularUser.toString());
     }
