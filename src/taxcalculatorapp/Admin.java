@@ -6,13 +6,13 @@ package taxcalculatorapp;
 
 /**
  *
- * @author thiagogoncos
+ * @author kelvidumas
  */
 class Admin extends User {
     private String adminTitle;
 
     public Admin(String username, String password, String name, String surname) {
-        super(username, password, name, surname);
+        super(username, password, name, surname, UserType.ADMIN);
     }
 
     public String getAdminTitle() {
@@ -25,7 +25,9 @@ class Admin extends User {
 
     @Override
     public void modifyProfile(String name, String surname) {
-        super.modifyProfile(name, surname);
+        super.setName(name);
+        super.setSurname(surname);
+        System.out.println("Admin profile modified: " + this);
     }
 
     public void grantAdminPrivileges(RegularUser user) {
