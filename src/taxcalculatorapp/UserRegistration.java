@@ -3,89 +3,100 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package taxcalculatorapp;
+import java.util.Scanner;
 
 /**
  *
  * @author kelvindumas
  */
-class UserRegistration {
-    public static RegularUser registerUser() {
-        Scanner scanner = new Scanner(System.in);
+	public class UserRegistration {
 
-        // Obter nome de usuário
-        String username;
-        do {
-            System.out.print("Enter new username (at least 8 characters): ");
-            username = scanner.next();
+	public static RegularUser registerUser() {
+    	Scanner scanner = new Scanner(System.in);
 
-            if (username.length() < 8) {
-                System.out.println("Username must have at least 8 characters. Please try again.");
-            }
-        } while (username.length() < 8 || Database.getUser(username) != null);
+    	// Obter nome de usuário
+    	String username;
+    	do {
+        	System.out.print("Enter new username (at least 8 characters): ");
+        	username = scanner.next();
 
-        // Obter senha
-        String password;
-        do {
-            System.out.print("Enter new password (at least 6 letters and 2 numbers): ");
-            password = scanner.next();
+        	if (username.length() < 8 || Database.getUser(username) != null) {
+            	System.out.println("Invalid username. Please try again.");
+        	}
+    	} while (username.length() < 8 || Database.getUser(username) != null);
 
-            // Verificar complexidade da senha
-            if (!isValidPassword(password)) {
-                System.out.println("Password must have at least 6 letters and 2 numbers. Please try again.");
-            }
-        } while (!isValidPassword(password));
+    	// Obter senha
+    	String password;
+    	do {
+        	System.out.print("Enter new password (at least 6 letters and 2 numbers): ");
+        	password = scanner.next();
 
-        // Obter nome
-        String name;
-        do {
-            System.out.print("Enter your name (only letters): ");
-            name = scanner.next();
+        	// Verificar complexidade da senha
+        	if (!isValidPassword(password)) {
+            	System.out.println("Invalid password. Please try again.");
+        	}
+    	} while (!isValidPassword(password));
 
-            if (!isValidName(name)) {
-                System.out.println("Name must contain only letters. Please try again.");
-            }
-        } while (!isValidName(name));
+    	// Obter nome
+    	String name;
+    	do {
+        	System.out.print("Enter your name (only letters): ");
+        	name = scanner.next();
 
-        // Obter sobrenome
-        String surname;
-        do {
-            System.out.print("Enter your surname (only letters): ");
-            surname = scanner.next();
+        	if (!isValidName(name)) {
+            	System.out.println("Invalid name. Please try again.");
+        	}
+    	} while (!isValidName(name));
 
-            if (!isValidName(surname)) {
-                System.out.println("Surname must contain only letters. Please try again.");
-            }
-        } while (!isValidName(surname));
+    	// Obter sobrenome
+    	String surname;
+    	do {
+        	System.out.print("Enter your surname (only letters): ");
+        	surname = scanner.next();
 
-        // Obter job role
-        System.out.print("Enter job role: ");
-        String jobRole = scanner.next();
+        	if (!isValidName(surname)) {
+            	System.out.println("Invalid surname. Please try again.");
+        	}
+    	} while (!isValidName(surname));
 
-        RegularUser newUser = new RegularUser(username, password, name, surname, jobRole);
+    	// Obter cargo
+    	System.out.print("Enter job role: ");
+    	String jobRole = scanner.next();
 
-        Database.storeUser(newUser);
+    	RegularUser newUser = new RegularUser(username, password, name, surname, jobRole);
 
-        System.out.println("User registration successful. Welcome, " + newUser.getUsername() + "!");
-        return newUser;
-    }
+    	// Crie uma instância de DatabaseWriter
+    	DatabaseWriter databaseWriter = new DatabaseWriter();
 
-    // Métodos auxiliares para validar senha e nome
-    private static boolean isValidPassword(String password) {
-        // Verifica se a senha tem pelo menos 6 letras e 2 números
-        int letterCount = 0;
-        int digitCount = 0;
-        for (char ch : password.toCharArray()) {
-            if (Character.isLetter(ch)) {
-                letterCount++;
-            } else if (Character.isDigit(ch)) {
-                digitCount++;
-            }
-        }
-        return letterCount >= 6 && digitCount >= 2;
-    }
+    	// Chame o método addUser no objeto DatabaseWriter
+    	if (databaseWriter.addUser(newUser)) {
+        	System.out.println("User registration successful. Welcome, " + username + "!");
+        	System.out.println();
+        	return newUser;
+    	} else {
+        	System.out.println("User registration failed. Please try again.");
+        	System.out.println();
+        	return null;
+    	}
+	}
 
-    private static boolean isValidName(String name) {
-        // Verifica se o nome contém apenas letras
-        return name.matches("^[a-zA-Z]+$");
-    }
+	// Métodos auxiliares para validar senha e nome
+	private static boolean isValidPassword(String password) {
+    	// Verifica se a senha tem pelo menos 6 letras e 2 números
+    	int letterCount = 0;
+    	int digitCount = 0;
+    	for (char ch : password.toCharArray()) {
+        	if (Character.isLetter(ch)) {
+            	letterCount++;
+        	} else if (Character.isDigit(ch)) {
+            	digitCount++;
+        	}
+    	}
+    	return letterCount >= 6 && digitCount >= 2;
+	}
+
+	private static boolean isValidName(String name) {
+    	// Verifica se o nome contém apenas letras
+    	return name.matches("^[a-zA-Z]+$");
+	}
 }
