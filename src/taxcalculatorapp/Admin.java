@@ -11,75 +11,132 @@ import java.sql.SQLException;
 
 /**
  *
- * @author kelvidumas
+ * @author thiagogoncos
  */
+import java.util.Scanner;
+import java.sql.SQLException;
+import java.util.Scanner;
+import java.sql.SQLException;
+
 public class Admin extends User {
 
-	private String adminTitle;
+    private String adminTitle;
 
-	public Admin(String username, String password, String name, String surname) {
-    	super(username, password, name, surname, UserType.ADMIN);
-	}
+    public Admin(String username, String password, String name, String surname) {
+        super(username, password, name, surname, UserType.ADMIN);
+    }
 
-	public String getAdminTitle() {
-    	return adminTitle;
-	}
+    public String getAdminTitle() {
+        return adminTitle;
+    }
 
-	public void setAdminTitle(String adminTitle) {
-    	this.adminTitle = adminTitle;
-	}
+    public void setAdminTitle(String adminTitle) {
+        this.adminTitle = adminTitle;
+    }
 
-	@Override
-	public void modifyProfile(String name, String surname) {
-    	super.setName(name);
-    	super.setSurname(surname);
-    	System.out.println("Admin profile modified: " + this);
-	}
+    @Override
+    public void modifyProfile(String name, String surname) {
+        super.setName(name);
+        super.setSurname(surname);
+        System.out.println("Admin profile modified: " + this);
+    }
 
-	public void grantAdminPrivileges(RegularUser user) {
-    	System.out.println("Admin privileges granted to user: " + user.getUsername());
-	}
+    public void grantAdminPrivileges(RegularUser user) {
+        System.out.println("Admin privileges granted to user: " + user.getUsername());
+    }
 
-	private static void reviewOperations(Admin admin) {
-	Scanner scanner = new Scanner(System.in);
+    private void accessUsersList() {
+        Database.displayAllUsers();
+    }
 
-	for (User user : Database.getAllUsers()) {
-    	if (user instanceof RegularUser) {
-        	RegularUser regularUser = (RegularUser) user;
-        	System.out.println("Tax calculations for user " + regularUser.getUsername() + ":");
+    private void removeUser() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter username to remove: ");
+        String usernameToRemove = scanner.next();
+        Database.removeUser(usernameToRemove);
+    }
 
-        	for (TaxCalculation taxCalculation : regularUser.getTaxCalculations()) {
-            	System.out.println(taxCalculationToString(taxCalculation));
-        	}
-    	}
-	}
-	}
+    private void reviewOperations() {
+        DatabaseReader databaseReader = new DatabaseReader();
+        databaseReader.reviewOperations(this);
+    }
 
-	private static String taxCalculationToString(TaxCalculation taxCalculation) {
-    	return "Gross Income: " + taxCalculation.getGrossIncome() +
-            	", Tax Credits: " + taxCalculation.getTaxCredits() +
-            	", Income Tax: " + taxCalculation.getIncomeTax() +
-            	", USC: " + taxCalculation.getUsc() +
-            	", PRSI: " + taxCalculation.getPrsi();
-	}
+    private void handleAdminActions() {
+        Scanner scanner = new Scanner(System.in);
+        int choice;
 
-	public void saveUserToDatabase(User user) {
-    	DatabaseWriter writer = new DatabaseWriter();
-    	writer.addUser(user);
-	}
+        do {
+            System.out.println();
+            System.out.println("Admin actions:");
+            for (UserAction action : UserAction.values()) {
+                System.out.println(action.ordinal() + 1 + ". " + action.getDescription());
+            }
 
-	public static void main(String[] args) {
-    	// Adicione a seguinte linha para criar o usuário Admin
-    	Admin admin = new Admin("CCT", "Dublin", "AdminName", "AdminSurname");
-    	admin.setAdminTitle("AdminTitle"); // Defina o título do Admin, se necessário
+            System.out.println();
 
-    	// Chame o método para salvar o Admin no banco de dados
-    	DatabaseWriter writer = new DatabaseWriter();
-    	writer.addUser(admin);
-	}
+            System.out.println("Admin Information:");
+            System.out.println(this.toString());
 
-	@Override
-	public String getJobRole() {
-    	return "Administrator";
-	}
+            System.out.println();
+
+            System.out.print("Enter your choice: ");
+            choice = scanner.nextInt();
+
+            if (choice > 0 && choice <= UserAction.values().length) {
+                UserAction selectedAction = UserAction.values()[choice - 1];
+
+                switch (selectedAction) {
+                    case MODIFY_PROFILE:
+                        System.out.print("Enter new username: ");
+                        String newUsername = scanner.next();
+                        System.out.print("Enter new password: ");
+                        String newPassword = scanner.next();
+                        System.out.print("Enter new name: ");
+                        String newName = scanner.next();
+                        System.out.print("Enter new surname: ");
+                        String newSurname = scanner.next();
+
+                        this.modifyProfile(newName, newSurname);
+                        this.setUsername(newUsername);
+                        this.setPassword(newPassword);
+
+                        Database.storeUser(this);
+                        break;
+                    case ACCESS_USERS_LIST:
+                        accessUsersList();
+                        break;
+                    case REMOVE_USER:
+                        removeUser();
+                        break;
+                    case REVIEW_OPERATIONS:
+                        reviewOperations();
+                        break;
+                    case EXIT:
+                        System.out.println("Exiting admin actions.");
+                        System.out.println();
+                        break;
+                    default:
+                        System.out.println("Invalid choice. Please try again.");
+                }
+                System.out.println();
+            } else {
+                System.out.println("Invalid choice. Please try again.");
+            }
+        } while (choice != UserAction.EXIT.ordinal() + 1);
+    }
+
+    public static void main(String[] args) {
+        Admin admin = new Admin("CCT", "Dublin", "AdminName", "AdminSurname");
+        admin.setAdminTitle("AdminTitle");
+
+        DatabaseWriter writer = new DatabaseWriter();
+        writer.addUser(admin);
+
+        admin.handleAdminActions();
+    }
+
+    @Override
+    public String getJobRole() {
+        return "Administrator";
+    }
 }
