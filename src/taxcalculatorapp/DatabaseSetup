@@ -1,3 +1,13 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package taxcalculatorapp;
+
+/**
+ *
+ * @author kelvindumas
+ */
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -13,7 +23,6 @@ public class DatabaseSetup {
     protected static final String DB_URL = DB_BASE_URL + "/" + DB_NAME;
 
     static {
-        // Carregar o driver JDBC do MySQL ao iniciar a classe
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
@@ -22,19 +31,16 @@ public class DatabaseSetup {
     }
 
     public static void setupDatabase() {
-        try (Connection conn = DriverManager.getConnection(DB_BASE_URL, USER, PASSWORD)) {
-            // Criação do banco de dados
-            try (Statement stmt = conn.createStatement()) {
+        try ( Connection conn = DriverManager.getConnection(DB_BASE_URL, USER, PASSWORD)) {
+            try ( Statement stmt = conn.createStatement()) {
                 stmt.execute("CREATE DATABASE IF NOT EXISTS " + DB_NAME);
                 System.out.println("Database '" + DB_NAME + "' created successfully.");
             }
 
-            // Selecionar o banco de dados
-            try (Statement stmt = conn.createStatement()) {
+            try ( Statement stmt = conn.createStatement()) {
                 stmt.execute("USE " + DB_NAME);
             }
 
-            // Criar a tabela
             createTable();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -46,9 +52,9 @@ public class DatabaseSetup {
                 + "id INT AUTO_INCREMENT PRIMARY KEY,"
                 + "username VARCHAR(50) NOT NULL,"
                 + "password VARCHAR(50) NOT NULL,"
-                + "name VARCHAR(50),"  // Adicione 'name' à tabela
-                + "surname VARCHAR(50),"  // Adicione 'surname' à tabela
-                + "jobRole VARCHAR(50),"  // Adicione 'jobRole' à tabela
+                + "name VARCHAR(50),"
+                + "surname VARCHAR(50),"
+                + "jobRole VARCHAR(50),"
                 + "userType VARCHAR(20) NOT NULL)";
         executeUpdate(createTableSQL);
 
@@ -66,8 +72,7 @@ public class DatabaseSetup {
     }
 
     private static void executeUpdate(String sql) {
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASSWORD);
-             Statement stmt = conn.createStatement()) {
+        try ( Connection conn = DriverManager.getConnection(DB_URL, USER, PASSWORD);  Statement stmt = conn.createStatement()) {
             stmt.executeUpdate(sql);
         } catch (SQLException e) {
             e.printStackTrace();
