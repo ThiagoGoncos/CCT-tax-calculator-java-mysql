@@ -8,6 +8,12 @@ import java.sql.SQLException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+/*
+@author ThiagoGoncos (2022161) and KelvinDumas (2022264)
+GitHub Link: https://github.com/Thiago2022161/taxcalculatorapp
+Presentation Video Link: https://www.youtube.com/watch?v=Fmmwt0PodRk
+*/
+
 // Main class for the Tax Calculator application
 public class TaxCalculatorApp {
 

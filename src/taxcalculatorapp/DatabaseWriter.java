@@ -15,26 +15,27 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/*
+@author ThiagoGoncos (2022161) and KelvinDumas (2022264)
+GitHub Link: https://github.com/Thiago2022161/taxcalculatorapp
+Presentation Video Link: https://www.youtube.com/watch?v=Fmmwt0PodRk
+*/
+
 // Definition of a class responsible for writing user data and taxes to the database
 public class DatabaseWriter extends Database {
 
     // Method to add a new user to the database
     public boolean addUser(User user) {
         try (
-            // Establish a database connection
-            Connection conn = DriverManager.getConnection(DB_URL, USER, PASSWORD);
-
-            // Prepare a SQL statement to check if the user already exists
-            PreparedStatement checkUserStmt = conn.prepareStatement("SELECT * FROM " + TABLE_NAME + " WHERE username = ?");
-            
-            // Prepare a SQL statement to insert a new user into the RegularUsers table
-            PreparedStatement stmt = conn.prepareStatement(
-                "INSERT INTO " + TABLE_NAME + " (username, password, name, surname, jobRole, userType) VALUES (?, ?, ?, ?, ?, ?)"
-            );
-        ) {
+                // Establish a database connection
+                 Connection conn = DriverManager.getConnection(DB_URL, USER, PASSWORD); // Prepare a SQL statement to check if the user already exists
+                  PreparedStatement checkUserStmt = conn.prepareStatement("SELECT * FROM " + TABLE_NAME + " WHERE username = ?"); // Prepare a SQL statement to insert a new user into the RegularUsers table
+                  PreparedStatement stmt = conn.prepareStatement(
+                        "INSERT INTO " + TABLE_NAME + " (username, password, name, surname, jobRole, userType) VALUES (?, ?, ?, ?, ?, ?)"
+                );) {
             // Set parameters in the checkUserStmt SQL statement
             checkUserStmt.setString(1, user.getUsername());
-            
+
             // Execute the SQL statement to check if the user already exists
             ResultSet existingUser = checkUserStmt.executeQuery();
 
@@ -67,20 +68,15 @@ public class DatabaseWriter extends Database {
     public static boolean saveUserDataAndTaxes(RegularUser regularUser, double grossIncome, double taxCredits,
             double incomeTax, double usc, double prsi) {
         try (
-            // Establish a database connection
-            Connection conn = DriverManager.getConnection(DB_URL, USER, PASSWORD);
-
-            // Prepare a SQL statement to insert user data into the RegularUsers table
-            PreparedStatement userStmt = conn.prepareStatement(
-                "INSERT INTO " + TABLE_NAME + " (username, password, name, surname, jobRole, userType) VALUES (?, ?, ?, ?, ?, ?)",
-                Statement.RETURN_GENERATED_KEYS
-            );
-
-            // Prepare a SQL statement to insert tax data into the TaxTable
-            PreparedStatement taxStmt = conn.prepareStatement(
-                "INSERT INTO TaxTable (username, grossIncome, taxCredits, incomeTax, usc, prsi) VALUES (?, ?, ?, ?, ?, ?)"
-            );
-        ) {
+                // Establish a database connection
+                 Connection conn = DriverManager.getConnection(DB_URL, USER, PASSWORD); // Prepare a SQL statement to insert user data into the RegularUsers table
+                  PreparedStatement userStmt = conn.prepareStatement(
+                        "INSERT INTO " + TABLE_NAME + " (username, password, name, surname, jobRole, userType) VALUES (?, ?, ?, ?, ?, ?)",
+                        Statement.RETURN_GENERATED_KEYS
+                ); // Prepare a SQL statement to insert tax data into the TaxTable
+                  PreparedStatement taxStmt = conn.prepareStatement(
+                        "INSERT INTO TaxTable (username, grossIncome, taxCredits, incomeTax, usc, prsi) VALUES (?, ?, ?, ?, ?, ?)"
+                );) {
             // Set auto-commit to false to enable a transaction
             conn.setAutoCommit(false);
 
@@ -101,7 +97,7 @@ public class DatabaseWriter extends Database {
             }
 
             // Obtain generated keys (if any)
-            try (ResultSet generatedKeys = userStmt.getGeneratedKeys()) {
+            try ( ResultSet generatedKeys = userStmt.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     // Set parameters in the taxStmt SQL statement for tax data insertion
                     taxStmt.setString(1, regularUser.getUsername());

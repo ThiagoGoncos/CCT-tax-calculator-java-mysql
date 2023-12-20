@@ -4,9 +4,15 @@
  */
 package taxcalculatorapp;
 
+/*
+@author ThiagoGoncos (2022161) and KelvinDumas (2022264)
+GitHub Link: https://github.com/Thiago2022161/taxcalculatorapp
+Presentation Video Link: https://www.youtube.com/watch?v=Fmmwt0PodRk
+*/
+
 // Enum representing various actions that can be performed by an Admin
 public enum UserAction {
-    
+
     // Enum constants representing different actions
     MODIFY_PROFILE("Modify Profile"),
     ACCESS_USERS_LIST("Access Users List"),

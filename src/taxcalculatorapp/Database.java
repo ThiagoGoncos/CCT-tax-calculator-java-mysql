@@ -8,9 +8,11 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+/*
+@author ThiagoGoncos (2022161) and KelvinDumas (2022264)
+GitHub Link: https://github.com/Thiago2022161/taxcalculatorapp
+Presentation Video Link: https://www.youtube.com/watch?v=Fmmwt0PodRk
+*/
 
 // Definition of an abstract Database class serving as a centralized storage for user-related operations
 public abstract class Database {

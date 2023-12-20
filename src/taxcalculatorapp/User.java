@@ -4,10 +4,12 @@
  */
 package taxcalculatorapp;
 
-/**
- *
- * @author thiagogoncos
- */
+/*
+@author ThiagoGoncos (2022161) and KelvinDumas (2022264)
+GitHub Link: https://github.com/Thiago2022161/taxcalculatorapp
+Presentation Video Link: https://www.youtube.com/watch?v=Fmmwt0PodRk
+*/
+
 // Abstract class representing a User in a tax calculation system
 public abstract class User {
 
@@ -81,11 +83,11 @@ public abstract class User {
     // Override toString method to provide a string representation of the User
     @Override
     public String toString() {
-        return "User{" +
-                "username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                '}';
+        return "User{"
+                + "username='" + username + '\''
+                + ", password='" + password + '\''
+                + ", name='" + name + '\''
+                + ", surname='" + surname + '\''
+                + '}';
     }
 }

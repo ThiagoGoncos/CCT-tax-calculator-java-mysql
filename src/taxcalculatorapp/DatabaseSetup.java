@@ -9,10 +9,11 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+/*
+@author ThiagoGoncos (2022161) and KelvinDumas (2022264)
+GitHub Link: https://github.com/Thiago2022161/taxcalculatorapp
+Presentation Video Link: https://www.youtube.com/watch?v=Fmmwt0PodRk
+*/
 
 // Definition of a class responsible for setting up the database schema and tables
 public class DatabaseSetup {
@@ -36,15 +37,15 @@ public class DatabaseSetup {
 
     // Method to set up the database, create it if not exists, and create required tables
     public static void setupDatabase() {
-        try (Connection conn = DriverManager.getConnection(DB_BASE_URL, USER, PASSWORD)) {
+        try ( Connection conn = DriverManager.getConnection(DB_BASE_URL, USER, PASSWORD)) {
             // Attempt to create the database if it does not exist
-            try (Statement stmt = conn.createStatement()) {
+            try ( Statement stmt = conn.createStatement()) {
                 stmt.execute("CREATE DATABASE IF NOT EXISTS " + DB_NAME);
                 System.out.println("Database '" + DB_NAME + "' created successfully.");
             }
 
             // Switch to using the created database
-            try (Statement stmt = conn.createStatement()) {
+            try ( Statement stmt = conn.createStatement()) {
                 stmt.execute("USE " + DB_NAME);
             }
 
@@ -57,7 +58,7 @@ public class DatabaseSetup {
 
     // Method to create tables in the database
     public static void createTable() {
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASSWORD)) {
+        try ( Connection conn = DriverManager.getConnection(DB_URL, USER, PASSWORD)) {
             // SQL statement to create RegularUsers table with specific columns
             String createTableSQL = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " ("
                     + "id INT AUTO_INCREMENT PRIMARY KEY,"
@@ -90,7 +91,7 @@ public class DatabaseSetup {
 
     // Method to execute an SQL update statement
     private static void executeUpdate(Connection conn, String sql) {
-        try (Statement stmt = conn.createStatement()) {
+        try ( Statement stmt = conn.createStatement()) {
             // Execute the SQL update statement
             stmt.executeUpdate(sql);
         } catch (SQLException e) {

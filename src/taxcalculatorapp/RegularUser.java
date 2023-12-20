@@ -9,6 +9,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/*
+@author ThiagoGoncos (2022161) and KelvinDumas (2022264)
+GitHub Link: https://github.com/Thiago2022161/taxcalculatorapp
+Presentation Video Link: https://www.youtube.com/watch?v=Fmmwt0PodRk
+*/
+
 // Definition of a class representing a regular user, extending the User class
 public class RegularUser extends User {
 
@@ -53,10 +59,10 @@ public class RegularUser extends User {
 
         // Create a TaxCalculation object with the calculated values
         TaxCalculation taxCalculation = new TaxCalculation(grossIncome, taxCredits, incomeTax, usc, prsi);
-        
+
         // Save the tax calculation by adding it to the taxCalculations list
         saveTaxCalculation(taxCalculation);
-        
+
         // Return the calculated TaxCalculation object
         return taxCalculation;
     }

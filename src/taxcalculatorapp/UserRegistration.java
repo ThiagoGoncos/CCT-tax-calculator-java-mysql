@@ -6,6 +6,12 @@ package taxcalculatorapp;
 
 import java.util.Scanner;
 
+/*
+@author ThiagoGoncos (2022161) and KelvinDumas (2022264)
+GitHub Link: https://github.com/Thiago2022161/taxcalculatorapp
+Presentation Video Link: https://www.youtube.com/watch?v=Fmmwt0PodRk
+*/
+
 // Class responsible for handling user registration functionality
 public class UserRegistration {
 
@@ -66,7 +72,8 @@ public class UserRegistration {
         String jobRole = scanner.next();
 
         // Create a new RegularUser instance with the provided information
-        RegularUser newUser = new RegularUser(username, password, name, surname, jobRole) {};
+        RegularUser newUser = new RegularUser(username, password, name, surname, jobRole) {
+        };
 
         // Create a DatabaseWriter instance to interact with the user database
         DatabaseWriter databaseWriter = new DatabaseWriter();

@@ -6,6 +6,12 @@ package taxcalculatorapp;
 
 import java.util.List;
 
+/*
+@author ThiagoGoncos (2022161) and KelvinDumas (2022264)
+GitHub Link: https://github.com/Thiago2022161/taxcalculatorapp
+Presentation Video Link: https://www.youtube.com/watch?v=Fmmwt0PodRk
+*/
+
 // Definition of a DatabaseReader class, extending the abstract Database class
 public class DatabaseReader extends Database {
 

@@ -4,6 +4,12 @@
  */
 package taxcalculatorapp;
 
+/*
+@author ThiagoGoncos (2022161) and KelvinDumas (2022264)
+GitHub Link: https://github.com/Thiago2022161/taxcalculatorapp
+Presentation Video Link: https://www.youtube.com/watch?v=Fmmwt0PodRk
+*/
+
 // Classe TaxCalculatorImpl
 // Implementation of the TaxCalculator interface
 public class TaxCalculatorImpl implements TaxCalculator {

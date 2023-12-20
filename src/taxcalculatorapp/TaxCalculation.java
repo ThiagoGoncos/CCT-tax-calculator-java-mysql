@@ -4,10 +4,11 @@
  */
 package taxcalculatorapp;
 
-/**
- *
- * @author thiagogoncos
- */
+/*
+@author ThiagoGoncos (2022161) and KelvinDumas (2022264)
+GitHub Link: https://github.com/Thiago2022161/taxcalculatorapp
+Presentation Video Link: https://www.youtube.com/watch?v=Fmmwt0PodRk
+*/
 
 // Definition of a class representing a TaxCalculation
 public class TaxCalculation {
