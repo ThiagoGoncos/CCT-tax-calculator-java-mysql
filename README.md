@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This project was developed as part of the **Object-Oriented Programming module** at **CCT College Dublin**.
+This project was developed as part of the **Object-Oriented Programming** and **Databases – Approaches and Systems** modules at **CCT College**.
 
 The objective of the project was to design and implement a **Java-based tax calculation system** capable of managing users, storing tax calculation records, and computing different components of Irish taxation.
 
@@ -13,9 +13,11 @@ The system allows users to:
 - Calculate taxes based on their income
 - Store and review previous tax calculations
 
-The project demonstrates the application of **object-oriented programming principles**, **database integration**, and **modular software design**.
+The project demonstrates the application of **object-oriented programming principles**, **database integration**, **input validation**, and **modular software design**.
 
 The application runs as a **console-based program** and interacts with a **MySQL database** to store user accounts and calculation records.
+
+This repository also includes the supporting **OOC/Database documentation**, covering the database design process, validation decisions, CRUD operations, normalisation, and conceptual modelling.
 
 ---
 
@@ -32,6 +34,8 @@ Key components of the system include:
 - Administrative control features
 
 This separation improves code readability, maintainability, and scalability.
+
+The design also follows **SOLID principles**, supporting a cleaner and more extensible structure. :contentReference[oaicite:1]{index=1}
 
 ---
 
@@ -51,7 +55,7 @@ Admin users can:
 - Review tax calculation operations
 - Manage system functionality
 
-Administrative actions are defined using an enumeration representing available operations. :contentReference[oaicite:0]{index=0}
+Administrative actions are defined using an enumeration representing available operations.
 
 ---
 
@@ -82,9 +86,9 @@ The base user class includes attributes such as:
 - Surname
 - User type
 
-It also defines abstract methods that must be implemented by subclasses for modifying profiles and retrieving job roles. :contentReference[oaicite:1]{index=1}
+It also defines abstract methods that must be implemented by subclasses for modifying profiles and retrieving job roles.
 
-This approach demonstrates **inheritance and abstraction**, key concepts in object-oriented programming.
+This approach demonstrates **inheritance and abstraction**, which are key concepts in object-oriented programming.
 
 ---
 
@@ -100,11 +104,11 @@ During login:
 
 If authentication fails, an error message is displayed.
 
-The login logic interacts with the database reader class responsible for retrieving user records. :contentReference[oaicite:2]{index=2}
+The login logic interacts with the database reader class responsible for retrieving user records.
 
 ---
 
-## User Registration
+## User Registration and Input Validation
 
 New users can register through a guided registration process.
 
@@ -116,7 +120,14 @@ The registration system performs validation checks including:
 
 These validations help ensure basic input integrity before storing user data.
 
-After successful validation, the system writes the new user to the database. :contentReference[oaicite:3]{index=3}
+The supporting OOC/Database report also explains that validation was important to avoid:
+
+- Duplicate submissions
+- Failed submissions
+- Lost data
+- Invalid tax calculation records :contentReference[oaicite:2]{index=2}
+
+After successful validation, the system writes the new user to the database.
 
 ---
 
@@ -164,7 +175,7 @@ The system calculates total tax by summing:
 - USC
 - PRSI
 
-The calculation logic is implemented using a dedicated tax calculator class that encapsulates the tax rules. :contentReference[oaicite:4]{index=4}
+The calculation logic is implemented using a dedicated tax calculator class that encapsulates the tax rules.
 
 ---
 
@@ -180,13 +191,60 @@ The database stores:
 
 The system interacts with the database through dedicated classes:
 
-- DatabaseReader
-- DatabaseWriter
-- DatabaseSetup
+- `DatabaseSetup`
+- `DatabaseWriter`
+- `DatabaseReader`
 
-These classes manage the interaction between the application and the database.
+These classes manage the interaction between the application and the database using **JDBC**, including connection setup, query execution, result handling, and closing connections properly. :contentReference[oaicite:3]{index=3}
 
-The project includes the **MySQL JDBC connector** for database connectivity. :contentReference[oaicite:5]{index=5}
+The project includes the **MySQL JDBC connector** for database connectivity.
+
+---
+
+## Database Design Documentation
+
+This repository also includes supporting database documentation from the integrated OOC/Database work.
+
+### Conceptual Design
+
+The database design includes a **CHEN notation conceptual model** showing the relationship between:
+
+- `User`
+- `TaxCalculation`
+- `Admin`
+- `RegularUser`
+
+The diagram identifies the main entities, attributes and relationships used in the system. :contentReference[oaicite:4]{index=4}
+
+### Relational Model
+
+The logical design defines relational tables such as:
+
+- `Users`
+- `TaxCalculations`
+
+The documentation includes example SQL table creation statements for both entities and their relationship through a foreign key. :contentReference[oaicite:5]{index=5}
+
+### CRUD Operations
+
+The report also documents the core SQL operations used in the project:
+
+- **Create** → adding users and saving tax calculations
+- **Read** → retrieving users and tax records
+- **Update** → modifying profile details
+- **Delete** → removing users
+
+This reinforces how the application supports full data interaction through the database layer. :contentReference[oaicite:6]{index=6}
+
+### Normalisation
+
+The database design was structured with normalisation in mind, including:
+
+- **1NF**
+- **2NF**
+- **3NF**
+
+This helped reduce redundancy, improve data integrity, and maintain a cleaner relational structure. :contentReference[oaicite:7]{index=7}
 
 ---
 
@@ -226,13 +284,13 @@ The system uses **MySQL** as the relational database for storing user informatio
 
 ### JDBC
 
-Java Database Connectivity (JDBC) is used to establish communication between the application and the MySQL database.
+Java Database Connectivity (**JDBC**) is used to establish communication between the application and the MySQL database.
 
 ---
 
-### Apache Ant (NetBeans Build System)
+### Apache Ant / NetBeans
 
-The project includes a build configuration file used by NetBeans to compile and run the project. :contentReference[oaicite:6]{index=6}
+The project includes a build configuration used by **NetBeans** to compile and run the application.
 
 ---
 
@@ -247,21 +305,35 @@ This project demonstrates several key software development concepts:
 - Database integration using JDBC
 - Modular software architecture
 - Console-based application development
+- Database modelling and normalisation
+- CRUD operations in relational systems
 
-The project helped reinforce both **software design principles and practical implementation skills** in Java.
+The project helped reinforce both **software design principles** and **practical database implementation skills**.
 
 ---
 
-## Author 
+## Repository Contents
 
-This project was developed by **Thiago Goncalves da Costa** as part of the **Bachelor of Science in Computing and Information Technology** at **CCT College Dublin**.
+This repository includes:
+
+- Java source code for the Tax Calculator application
+- Database-related classes and JDBC integration
+- Project build files
+- Supporting academic documentation
+- **OOC/Database report (`oocdatabase.pdf`)** with database design, CRUD, validation, and normalisation details
+
+---
+
+## Author
+
+This project was developed by **Thiago Goncalves da Costa** as part of the **Bachelor of Science in Computing and Information Technology** at **CCT College**.
 
 During my studies, I used the institutional GitHub account associated with my student email:
 
-2022161@student.cct.ie
+**2022161@student.cct.ie**
 
 Since institutional accounts and student emails may be deactivated after graduation, this repository was migrated to my personal GitHub account:
 
-https://github.com/ThiagoGoncos
+**https://github.com/ThiagoGoncos**
 
 This ensures long-term preservation of the project, commit history, and academic work completed during the degree program.
